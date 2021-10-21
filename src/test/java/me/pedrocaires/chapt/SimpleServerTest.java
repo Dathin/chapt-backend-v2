@@ -10,14 +10,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class SimpleServerTest {
 
-    @Mock
-    MessageHandlerDecider messageHandlerDecider;
+	@Mock
+	MessageHandlerDecider messageHandlerDecider;
 
-    @InjectMocks
-    SimpleServer simpleServer;
+	@InjectMocks
+	SimpleServer simpleServer;
 
-    @Test
-    void a(){
-        simpleServer.onStart();
-    }
+	@Test
+	void a() {
+		simpleServer.onStart();
+	}
+
 }
