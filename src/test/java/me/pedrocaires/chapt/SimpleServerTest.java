@@ -7,11 +7,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.net.InetSocketAddress;
+
 @ExtendWith(MockitoExtension.class)
 class SimpleServerTest {
 
 	@Mock
 	MessageHandlerDecider messageHandlerDecider;
+
+	@Mock
+	InetSocketAddress inetSocketAddress;
 
 	@InjectMocks
 	SimpleServer simpleServer;
