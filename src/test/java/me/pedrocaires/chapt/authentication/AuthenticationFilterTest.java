@@ -19,42 +19,42 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ExtendWith(MockitoExtension.class)
 class AuthenticationFilterTest {
 
-    @Mock
-    WebSocketListener webSocketListener;
+	@Mock
+	WebSocketListener webSocketListener;
 
-    @InjectMocks
-    AuthenticationFilter authenticationFilter;
+	@InjectMocks
+	AuthenticationFilter authenticationFilter;
 
-    WebSocketImpl webSocket;
+	WebSocketImpl webSocket;
 
-    WebSocketAttachment webSocketAttachment;
+	WebSocketAttachment webSocketAttachment;
 
-    @BeforeEach
-    void beforeEach() {
-        webSocket = new WebSocketImpl(webSocketListener, Arrays.asList());
-        webSocketAttachment = new WebSocketAttachment();
-        webSocket.setAttachment(webSocketAttachment);
-    }
+	@BeforeEach
+	void beforeEach() {
+		webSocket = new WebSocketImpl(webSocketListener, Arrays.asList());
+		webSocketAttachment = new WebSocketAttachment();
+		webSocket.setAttachment(webSocketAttachment);
+	}
 
-    @Test
-    void shouldPassAuthenticationFilter() {
-        webSocketAttachment.getAuthenticationFilter().setAuthenticated(true);
+	@Test
+	void shouldPassAuthenticationFilter() {
+		webSocketAttachment.getAuthenticationFilter().setAuthenticated(true);
 
-        assertDoesNotThrow(() -> authenticationFilter.doFilter(webSocket, Handler.DIRECT));
-    }
+		assertDoesNotThrow(() -> authenticationFilter.doFilter(webSocket, Handler.DIRECT));
+	}
 
-    @Test
-    void shouldPassAuthenticationFilterWhenTryingTo() {
-        webSocketAttachment.getAuthenticationFilter().setAuthenticated(false);
+	@Test
+	void shouldPassAuthenticationFilterWhenTryingTo() {
+		webSocketAttachment.getAuthenticationFilter().setAuthenticated(false);
 
-        assertDoesNotThrow(() -> authenticationFilter.doFilter(webSocket, Handler.AUTH));
-    }
+		assertDoesNotThrow(() -> authenticationFilter.doFilter(webSocket, Handler.AUTH));
+	}
 
-    @Test
-    void shouldThrowWhenNotAuthenticatedAndNotTryingTo() {
-        webSocketAttachment.getAuthenticationFilter().setAuthenticated(false);
+	@Test
+	void shouldThrowWhenNotAuthenticatedAndNotTryingTo() {
+		webSocketAttachment.getAuthenticationFilter().setAuthenticated(false);
 
-        assertThrows(UnauthenticatedException.class, () -> authenticationFilter.doFilter(webSocket, Handler.DIRECT));
-    }
+		assertThrows(UnauthenticatedException.class, () -> authenticationFilter.doFilter(webSocket, Handler.DIRECT));
+	}
 
 }
