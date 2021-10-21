@@ -1,1 +1,1 @@
-mvn spring-javaformat:validate || echo "Do not forget to commit after apply"
+mvn spring-javaformat:validate || echo "\033[0;36m Run \"mvn spring-javaformat:validate\" to apply autoformat. Just Do not forget to commit after apply changes"
