@@ -1,1 +1,1 @@
-mvn spring-javaformat:validate
+mvn spring-javaformat:validate || echo "Do not forget to commit after apply"

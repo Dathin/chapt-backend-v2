@@ -20,8 +20,8 @@ public class SimpleServer extends WebSocketServer {
 
 	private final MessageHandlerDecider messageHandlerDecider;
 
-	public SimpleServer(MessageHandlerDecider messageHandlerDecider) {
-		super(new InetSocketAddress("localhost", 8087));
+	public SimpleServer(InetSocketAddress address, MessageHandlerDecider messageHandlerDecider) {
+		super(address);
 		this.messageHandlerDecider = messageHandlerDecider;
 	}
 

@@ -98,7 +98,7 @@
             <plugin>
                 <groupId>io.github.dathin</groupId>
                 <artifactId>jhusky</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.0.1</version>
             </plugin>
             <plugin>
                 <groupId>io.spring.javaformat</groupId>
