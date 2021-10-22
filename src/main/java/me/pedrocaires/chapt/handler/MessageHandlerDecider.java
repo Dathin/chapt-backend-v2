@@ -8,7 +8,7 @@ import me.pedrocaires.chapt.exception.UnexpectedException;
 import me.pedrocaires.chapt.handler.message.auth.AuthMessage;
 import me.pedrocaires.chapt.handler.message.auth.AuthRequestDTO;
 import me.pedrocaires.chapt.handler.message.direct.DirectMessage;
-import me.pedrocaires.chapt.handler.message.direct.DirectResponseDTO;
+import me.pedrocaires.chapt.handler.message.direct.DirectDTO;
 import me.pedrocaires.chapt.handler.transformer.BroadcastToSerializableBroadcast;
 import org.java_websocket.WebSocket;
 import org.springframework.stereotype.Component;
@@ -58,7 +58,7 @@ public class MessageHandlerDecider {
 			return Optional.empty();
 		}
 		else if (handlerEnum == Handler.DIRECT) {
-			var parsedMessage = objectMapper.readValue(message, DirectResponseDTO.class);
+			var parsedMessage = objectMapper.readValue(message, DirectDTO.class);
 			var messageResponse = directMessage.handleMessage(parsedMessage, client, clients);
 			if (messageResponse.isPresent()) {
 				return broadcastToSerializableBroadcast.transform(messageResponse);

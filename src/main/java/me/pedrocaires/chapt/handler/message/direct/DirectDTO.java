@@ -2,7 +2,7 @@ package me.pedrocaires.chapt.handler.message.direct;
 
 import me.pedrocaires.chapt.handler.BaseMessageDTO;
 
-public class DirectResponseDTO extends BaseMessageDTO {
+public class DirectDTO extends BaseMessageDTO {
 
 	private String to;
 
