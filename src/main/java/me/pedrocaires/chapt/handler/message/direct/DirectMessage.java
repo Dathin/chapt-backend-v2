@@ -15,7 +15,7 @@ public class DirectMessage implements Message<DirectDTO, DirectDTO> {
 
 	@Override
 	public Optional<Broadcast<DirectDTO>> handleMessage(DirectDTO message, WebSocket webSocket,
-														Map<String, WebSocket> clients) {
+			Map<String, WebSocket> clients) {
 		var receipting = clients.get(message.getTo());
 		var clientsToBroadcast = receipting == null ? Collections.emptyList() : Collections.singletonList(receipting);
 		return Optional.of(new Broadcast(message, clientsToBroadcast));
