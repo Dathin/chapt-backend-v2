@@ -7,6 +7,7 @@ import me.pedrocaires.chapt.handler.transformer.BroadcastToSerializableBroadcast
 import org.java_websocket.WebSocket;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -23,8 +24,8 @@ public class DirectMessageExecutor extends MessageExecutor<DirectDTO, DirectDTO>
 	public Optional<Broadcast<DirectDTO>> handleMessage(DirectDTO message, WebSocket client,
 			Map<String, WebSocket> clients) {
 		var receipting = clients.get(message.getTo());
-		var clientsToBroadcast = receipting == null ? Collections.emptyList() : Collections.singletonList(receipting);
-		return Optional.of(new Broadcast(message, clientsToBroadcast));
+		Collection<WebSocket> clientsToBroadcast = receipting == null ? Collections.emptyList() : Collections.singletonList(receipting);
+		return Optional.of(new Broadcast<>(message, clientsToBroadcast));
 	}
 
 }

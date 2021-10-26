@@ -1,11 +1,15 @@
 package me.pedrocaires.chapt;
 
 import me.pedrocaires.chapt.springconfig.SpringContextConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.IOException;
 
 public class Main {
+
+	public static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
 	public static void main(String[] args) {
 		var context = configureSpringContext();
@@ -25,12 +29,16 @@ public class Main {
 	private static void closeServerOnShutdown(SimpleServer server) {
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			try {
-				System.out.println("Stopping server");
+				LOGGER.info("Stopping server");
 				server.stop();
-				System.out.println("Server stopped");
+				LOGGER.info("Server stopped");
 			}
-			catch (InterruptedException | IOException ex) {
-				System.out.println("Unable to stop service");
+			catch (IOException ex) {
+				LOGGER.error("IO error at shutdown", ex);
+			}
+			catch (InterruptedException ex) {
+				LOGGER.error("Interrupted", ex);
+				Thread.currentThread().interrupt();
 			}
 		}));
 	}

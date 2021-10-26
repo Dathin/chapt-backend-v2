@@ -40,7 +40,7 @@ public class MessageHandlerDecider {
 			throw new UnexpectedException();
 		}
 		String handlerString = handler.toString();
-		var handlerEnum = Handler.fromString(handlerString.replaceAll("\"", ""));
+		var handlerEnum = Handler.fromString(handlerString.replace("\"", ""));
 		authenticationFilter.doFilter(client, handlerEnum);
 		if (handlerEnum == Handler.AUTH) {
 			return authMessageExecutor.execute(message, client, clients);

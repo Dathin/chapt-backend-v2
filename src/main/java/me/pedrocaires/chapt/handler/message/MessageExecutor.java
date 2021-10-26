@@ -20,7 +20,7 @@ public abstract class MessageExecutor<I extends BaseMessageDTO, O extends BaseMe
 
 	private final BroadcastToSerializableBroadcast broadcastToSerializableBroadcast;
 
-	public MessageExecutor(ObjectMapper objectMapper,
+	protected MessageExecutor(ObjectMapper objectMapper,
 			BroadcastToSerializableBroadcast broadcastToSerializableBroadcast) {
 		this.iClass = ((Class<I>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
 		this.objectMapper = objectMapper;
@@ -31,7 +31,7 @@ public abstract class MessageExecutor<I extends BaseMessageDTO, O extends BaseMe
 
 	public Optional<SerializableBroadcast> execute(String message, WebSocket client, Map<String, WebSocket> clients)
 			throws JsonProcessingException {
-		var parsedMessage = (I) objectMapper.readValue(message, iClass);
+		var parsedMessage = objectMapper.readValue(message, iClass);
 		var messageResponse = handleMessage(parsedMessage, client, clients);
 		if (messageResponse.isPresent()) {
 			return broadcastToSerializableBroadcast.transform(messageResponse);

@@ -31,27 +31,21 @@ public class SimpleServer extends WebSocketServer {
 
 	@Override
 	public void onOpen(WebSocket client, ClientHandshake handshake) {
-		// client.send("Welcome to the server!"); //This method sends a message to the new
-		// client
-		// broadcast( "new clientection: " + handshake.getResourceDescriptor() ); //This
-		// method sends a message to all clients clientected
 		client.setAttachment(new WebSocketAttachment());
-		// System.out.println("new clientection to " + client.getRemoteSocketAddress());
 	}
 
 	@Override
 	public void onClose(WebSocket client, int code, String reason, boolean remote) {
-		System.out.println("closed " + client.getRemoteSocketAddress() + " with exit code " + code
-				+ " additional info: " + reason);
+		LOGGER.info(String.format("closed %s with exit code %s additional info: %x", client.getRemoteSocketAddress(), code, reason));
 	}
 
 	@Override
 	public void onMessage(WebSocket client, String message) {
-		System.out.println("Received message");
+		LOGGER.info("Received message");
 		try {
 			var optionalBroadcast = messageHandlerDecider.decide(message, client, authenticatedSessions);
 			optionalBroadcast.ifPresent(broadcast -> broadcast(broadcast.getMessage(), broadcast.getClients()));
-			System.out.println("Broadcasted");
+			LOGGER.info("Broadcasted");
 		}
 		catch (JsonProcessingException ex) {
 			throw new UnexpectedException();
@@ -65,7 +59,7 @@ public class SimpleServer extends WebSocketServer {
 
 	@Override
 	public void onStart() {
-		System.out.println("server started successfully");
+		LOGGER.info("server started successfully");
 	}
 
 }

@@ -32,7 +32,7 @@ public class AuthMessageExecutor extends MessageExecutor<AuthRequestDTO, AuthRes
 		if (authenticated) {
 			clients.put(message.getUsername(), client);
 		}
-		return Optional.of(new Broadcast(authResponse, Collections.singleton(client)));
+		return Optional.of(new Broadcast<>(authResponse, Collections.singleton(client)));
 	}
 
 	private boolean authenticate(AuthRequestDTO message) {
