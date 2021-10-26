@@ -19,7 +19,9 @@ public class AuthMessage implements Message<AuthRequestDTO, AuthResponseDTO> {
 		var authentication = webSocketAttachment.getAuthenticationFilter();
 		authentication.setAuthenticated(authenticated);
 		var authResponse = new AuthResponseDTO(authenticated);
-		clients.put(message.getUsername(), client);
+		if (authenticated) {
+			clients.put(message.getUsername(), client);
+		}
 		return Optional.of(new Broadcast(authResponse, Collections.singleton(client)));
 	}
 

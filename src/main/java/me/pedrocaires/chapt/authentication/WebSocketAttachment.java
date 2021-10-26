@@ -8,6 +8,10 @@ public class WebSocketAttachment {
 		this.authentication = new Authentication();
 	}
 
+	public WebSocketAttachment(Authentication authentication) {
+		this.authentication = authentication;
+	}
+
 	public Authentication getAuthenticationFilter() {
 		return authentication;
 	}

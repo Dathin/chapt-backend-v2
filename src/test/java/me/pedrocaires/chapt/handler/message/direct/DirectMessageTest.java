@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class DirectMessageTest {
 
 	@Mock
-	WebSocket webSocket;
+	WebSocket client;
 
 	@InjectMocks
 	DirectMessage directMessage;
@@ -25,7 +25,7 @@ class DirectMessageTest {
 		var directDTO = new DirectDTO();
 		directDTO.setTo("user123");
 
-		var response = directMessage.handleMessage(directDTO, webSocket, Collections.singletonMap("user123", webSocket))
+		var response = directMessage.handleMessage(directDTO, client, Collections.singletonMap("user123", client))
 				.get();
 
 		assertEquals(directDTO, response.getMessage());
@@ -37,7 +37,7 @@ class DirectMessageTest {
 		var directDTO = new DirectDTO();
 		directDTO.setTo("user123");
 
-		var response = directMessage.handleMessage(directDTO, webSocket, Collections.emptyMap()).get();
+		var response = directMessage.handleMessage(directDTO, client, Collections.emptyMap()).get();
 
 		assertEquals(0, response.getClients().size());
 	}
