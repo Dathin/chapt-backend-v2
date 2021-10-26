@@ -14,17 +14,17 @@ import java.util.Optional;
 @Component
 public class DirectMessageExecutor extends MessageExecutor<DirectDTO, DirectDTO> {
 
-    public DirectMessageExecutor(ObjectMapper objectMapper,
-                                 BroadcastToSerializableBroadcast broadcastToSerializableBroadcast) {
-        super(objectMapper, broadcastToSerializableBroadcast);
-    }
+	public DirectMessageExecutor(ObjectMapper objectMapper,
+			BroadcastToSerializableBroadcast broadcastToSerializableBroadcast) {
+		super(objectMapper, broadcastToSerializableBroadcast);
+	}
 
-    @Override
-    public Optional<Broadcast<DirectDTO>> handleMessage(DirectDTO message, WebSocket client,
-                                                        Map<String, WebSocket> clients) {
-        var receipting = clients.get(message.getTo());
-        var clientsToBroadcast = receipting == null ? Collections.emptyList() : Collections.singletonList(receipting);
-        return Optional.of(new Broadcast(message, clientsToBroadcast));
-    }
+	@Override
+	public Optional<Broadcast<DirectDTO>> handleMessage(DirectDTO message, WebSocket client,
+			Map<String, WebSocket> clients) {
+		var receipting = clients.get(message.getTo());
+		var clientsToBroadcast = receipting == null ? Collections.emptyList() : Collections.singletonList(receipting);
+		return Optional.of(new Broadcast(message, clientsToBroadcast));
+	}
 
 }

@@ -9,14 +9,14 @@ import java.net.InetSocketAddress;
 @Configuration
 public class BeanConfig {
 
-    @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper();
-    }
+	@Bean
+	public ObjectMapper objectMapper() {
+		return new ObjectMapper();
+	}
 
-    @Bean
-    public InetSocketAddress inetSocketAddress() {
-        return new InetSocketAddress("localhost", 8087);
-    }
+	@Bean
+	public InetSocketAddress inetSocketAddress() {
+		return new InetSocketAddress("localhost", 8087);
+	}
 
 }

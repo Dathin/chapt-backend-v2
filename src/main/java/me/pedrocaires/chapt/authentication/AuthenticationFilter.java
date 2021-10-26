@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthenticationFilter {
 
-    public void doFilter(WebSocket client, Handler handler) {
-        var webSocketAttachment = (WebSocketAttachment) client.getAttachment();
-        var authentication = webSocketAttachment.getAuthenticationFilter();
-        if (!authentication.isAuthenticated() && handler != Handler.AUTH) {
-            throw new UnauthenticatedException();
-        }
-    }
+	public void doFilter(WebSocket client, Handler handler) {
+		var webSocketAttachment = (WebSocketAttachment) client.getAttachment();
+		var authentication = webSocketAttachment.getAuthenticationFilter();
+		if (!authentication.isAuthenticated() && handler != Handler.AUTH) {
+			throw new UnauthenticatedException();
+		}
+	}
 
 }

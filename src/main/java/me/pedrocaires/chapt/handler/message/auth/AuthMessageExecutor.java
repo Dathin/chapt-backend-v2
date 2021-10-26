@@ -16,29 +16,29 @@ import java.util.Optional;
 @Component
 public class AuthMessageExecutor extends MessageExecutor<AuthRequestDTO, AuthResponseDTO> {
 
-    public AuthMessageExecutor(ObjectMapper objectMapper,
-                               BroadcastToSerializableBroadcast broadcastToSerializableBroadcast) {
-        super(objectMapper, broadcastToSerializableBroadcast);
-    }
+	public AuthMessageExecutor(ObjectMapper objectMapper,
+			BroadcastToSerializableBroadcast broadcastToSerializableBroadcast) {
+		super(objectMapper, broadcastToSerializableBroadcast);
+	}
 
-    @Override
-    public Optional<Broadcast<AuthResponseDTO>> handleMessage(AuthRequestDTO message, WebSocket client,
-                                                              Map<String, WebSocket> clients) {
-        var authenticated = authenticate(message);
-        var webSocketAttachment = (WebSocketAttachment) client.getAttachment();
-        var authentication = webSocketAttachment.getAuthenticationFilter();
-        authentication.setAuthenticated(authenticated);
-        var authResponse = new AuthResponseDTO(authenticated);
-        if (authenticated) {
-            clients.put(message.getUsername(), client);
-        }
-        return Optional.of(new Broadcast(authResponse, Collections.singleton(client)));
-    }
+	@Override
+	public Optional<Broadcast<AuthResponseDTO>> handleMessage(AuthRequestDTO message, WebSocket client,
+			Map<String, WebSocket> clients) {
+		var authenticated = authenticate(message);
+		var webSocketAttachment = (WebSocketAttachment) client.getAttachment();
+		var authentication = webSocketAttachment.getAuthenticationFilter();
+		authentication.setAuthenticated(authenticated);
+		var authResponse = new AuthResponseDTO(authenticated);
+		if (authenticated) {
+			clients.put(message.getUsername(), client);
+		}
+		return Optional.of(new Broadcast(authResponse, Collections.singleton(client)));
+	}
 
-    private boolean authenticate(AuthRequestDTO message) {
-        if (Objects.equals("pedro", message.getUsername()) && Objects.equals("caires", message.getPassword())) {
-            return true;
-        }
+	private boolean authenticate(AuthRequestDTO message) {
+		if (Objects.equals("pedro", message.getUsername()) && Objects.equals("caires", message.getPassword())) {
+			return true;
+		}
 		return Objects.equals("daniel", message.getUsername()) && Objects.equals("caires", message.getPassword());
 	}
 
