@@ -36,7 +36,8 @@ public class SimpleServer extends WebSocketServer {
 
 	@Override
 	public void onClose(WebSocket client, int code, String reason, boolean remote) {
-		LOGGER.info(String.format("closed %s with exit code %s additional info: %x", client.getRemoteSocketAddress(), code, reason));
+		LOGGER.info(String.format("closed %s with exit code %s additional info: %x", client.getRemoteSocketAddress(),
+				code, reason));
 	}
 
 	@Override

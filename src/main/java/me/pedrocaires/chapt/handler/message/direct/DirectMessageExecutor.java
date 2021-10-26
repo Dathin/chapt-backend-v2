@@ -24,7 +24,8 @@ public class DirectMessageExecutor extends MessageExecutor<DirectDTO, DirectDTO>
 	public Optional<Broadcast<DirectDTO>> handleMessage(DirectDTO message, WebSocket client,
 			Map<String, WebSocket> clients) {
 		var receipting = clients.get(message.getTo());
-		Collection<WebSocket> clientsToBroadcast = receipting == null ? Collections.emptyList() : Collections.singletonList(receipting);
+		Collection<WebSocket> clientsToBroadcast = receipting == null ? Collections.emptyList()
+				: Collections.singletonList(receipting);
 		return Optional.of(new Broadcast<>(message, clientsToBroadcast));
 	}
 
