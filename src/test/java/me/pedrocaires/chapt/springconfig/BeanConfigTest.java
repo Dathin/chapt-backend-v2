@@ -10,16 +10,17 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class BeanConfigTest {
 
-    @InjectMocks
-    BeanConfig beanConfig;
+	@InjectMocks
+	BeanConfig beanConfig;
 
-    @Test
-    void shouldReturnObjectMapper() {
-        assertNotNull(beanConfig.objectMapper());
-    }
+	@Test
+	void shouldReturnObjectMapper() {
+		assertNotNull(beanConfig.objectMapper());
+	}
 
-    @Test
-    void shouldReturnInetSocketAddress() {
-        assertNotNull(beanConfig.inetSocketAddress());
-    }
+	@Test
+	void shouldReturnInetSocketAddress() {
+		assertNotNull(beanConfig.inetSocketAddress());
+	}
+
 }

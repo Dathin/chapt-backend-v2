@@ -82,4 +82,5 @@ class SimpleServerTest {
 	void shouldOnClose() {
 		simpleServer.onClose(client, 1, "", false);
 	}
+
 }

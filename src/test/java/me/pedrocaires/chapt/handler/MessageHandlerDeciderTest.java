@@ -25,63 +25,63 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class MessageHandlerDeciderTest {
 
-    @Mock
-    AuthMessage authMessage;
+	@Mock
+	AuthMessage authMessage;
 
-    @Mock
-    DirectMessage directMessage;
+	@Mock
+	DirectMessage directMessage;
 
-    @Mock
-    AuthenticationFilter authenticationFilter;
+	@Mock
+	AuthenticationFilter authenticationFilter;
 
-    @Mock
-    ObjectMapper objectMapper;
+	@Mock
+	ObjectMapper objectMapper;
 
-    @Mock
-    ObjectNode objectNode;
+	@Mock
+	ObjectNode objectNode;
 
-    @Mock
-    WebSocket client;
+	@Mock
+	WebSocket client;
 
-    @Mock
-    JsonNode jsonNode;
+	@Mock
+	JsonNode jsonNode;
 
-    @InjectMocks
-    MessageHandlerDecider messageHandlerDecider;
+	@InjectMocks
+	MessageHandlerDecider messageHandlerDecider;
 
+	@Test
+	void shouldThrowUnexpectedExceptionWhenHandleIsNull() throws JsonProcessingException {
+		var message = "";
+		when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
+		when(objectNode.get("handler")).thenReturn(null);
 
-    @Test
-    void shouldThrowUnexpectedExceptionWhenHandleIsNull() throws JsonProcessingException {
-        var message = "";
-        when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
-        when(objectNode.get("handler")).thenReturn(null);
+		assertThrows(UnexpectedException.class,
+				() -> messageHandlerDecider.decide(message, client, Collections.singletonMap("user", client)));
+	}
 
-        assertThrows(UnexpectedException.class, () -> messageHandlerDecider.decide(message, client, Collections.singletonMap("user", client)));
-    }
+	@Test
+	void shouldFilterRequests() throws JsonProcessingException {
+		var message = "";
+		when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
+		when(objectNode.get("handler")).thenReturn(jsonNode);
+		when(jsonNode.toString()).thenReturn("\"AUTH\"");
 
-    @Test
-    void shouldFilterRequests() throws JsonProcessingException {
-        var message = "";
-        when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
-        when(objectNode.get("handler")).thenReturn(jsonNode);
-        when(jsonNode.toString()).thenReturn("\"AUTH\"");
+		messageHandlerDecider.decide(message, client, Collections.singletonMap("user", client));
 
-        messageHandlerDecider.decide(message, client, Collections.singletonMap("user", client));
+		verify(authenticationFilter).doFilter(any(), any());
+	}
 
-        verify(authenticationFilter).doFilter(any(), any());
-    }
+	@Test
+	void shouldThrowUnexpectedExceptionWhenUnknownHandle() throws JsonProcessingException {
+		var message = "";
+		when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
+		when(objectNode.get("handler")).thenReturn(jsonNode);
+		when(jsonNode.toString()).thenReturn("\"NOTSURE\"");
 
-    @Test
-    void shouldThrowUnexpectedExceptionWhenUnknownHandle() throws JsonProcessingException {
-        var message = "";
-        when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
-        when(objectNode.get("handler")).thenReturn(jsonNode);
-        when(jsonNode.toString()).thenReturn("\"NOTSURE\"");
+		assertThrows(UnexpectedException.class,
+				() -> messageHandlerDecider.decide(message, client, Collections.singletonMap("user", client)));
+	}
 
-
-        assertThrows(UnexpectedException.class, () -> messageHandlerDecider.decide(message, client, Collections.singletonMap("user", client)));
-    }
-
-    //TODO: test AUTH AND DIRECT BEING CALLED
+	// TODO: test AUTH AND DIRECT BEING CALLED
 
 }
