@@ -2,14 +2,14 @@ package me.pedrocaires.chapt.handler.message.auth;
 
 import me.pedrocaires.chapt.authentication.WebSocketAttachment;
 import me.pedrocaires.chapt.handler.Broadcast;
-import me.pedrocaires.chapt.handler.message.Message;
+import me.pedrocaires.chapt.handler.message.MessageHandler;
 import org.java_websocket.WebSocket;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 @Component
-public class AuthMessage implements Message<AuthRequestDTO, AuthResponseDTO> {
+public class AuthMessageHandler implements MessageHandler<AuthRequestDTO, AuthResponseDTO> {
 
 	@Override
 	public Optional<Broadcast<AuthResponseDTO>> handleMessage(AuthRequestDTO message, WebSocket client,

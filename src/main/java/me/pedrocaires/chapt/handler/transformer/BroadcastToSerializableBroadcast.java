@@ -17,7 +17,7 @@ public class BroadcastToSerializableBroadcast {
 		this.objectMapper = objectMapper;
 	}
 
-	public <RES> Optional<SerializableBroadcast> transform(Optional<Broadcast<RES>> optionalBroadcast)
+	public <O> Optional<SerializableBroadcast> transform(Optional<Broadcast<O>> optionalBroadcast)
 			throws JsonProcessingException {
 		if (optionalBroadcast.isPresent()) {
 			var broadcast = optionalBroadcast.get();

@@ -20,9 +20,9 @@ public class SimpleClient extends WebSocketClient {
 
 	@Override
 	public void onOpen(ServerHandshake handshakedata) {
-		send("{\"handler\": \"AUTH\", \"username\": \"pedro\", \"password\": \"caires\"}");
+		send("{\"handler\": \"AUTH\", \"username\": \"daniel\", \"password\": \"caires\"}");
 		System.out.println("new connection opened");
-		send("{\"handler\": \"DIRECT\", \"to\": \"daniel\", \"uuid\": \"1\", \"content\": \"petter1\"}");
+		send("{\"handler\": \"DIRECT\", \"to\": \"pedro\", \"uuid\": \"1\", \"content\": \"petter1\"}");
 	}
 
 	@Override

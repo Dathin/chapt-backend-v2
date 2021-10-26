@@ -12,13 +12,13 @@ import java.util.Collections;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
-class DirectMessageTest {
+class DirectMessageHandlerTest {
 
 	@Mock
 	WebSocket client;
 
 	@InjectMocks
-	DirectMessage directMessage;
+	DirectMessageHandler directMessage;
 
 	@Test
 	void shouldReturnUserToBroadcastMessage() {

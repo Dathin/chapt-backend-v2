@@ -22,7 +22,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class AuthMessageTest {
+class AuthMessageHandlerTest {
 
 	WebSocketImpl client;
 
@@ -38,7 +38,7 @@ class AuthMessageTest {
 	Map<String, WebSocket> clients;
 
 	@InjectMocks
-	AuthMessage authMessage;
+	AuthMessageHandler authMessageHandler;
 
 	@BeforeEach
 	void beforeEach() {
@@ -53,7 +53,7 @@ class AuthMessageTest {
 		authRequest.setUsername("pedro");
 		authRequest.setPassword("caires");
 
-		authMessage.handleMessage(authRequest, client, clients);
+		authMessageHandler.handleMessage(authRequest, client, clients);
 
 		verify(authentication).setAuthenticated(true);
 	}
@@ -65,7 +65,7 @@ class AuthMessageTest {
 		authRequest.setUsername(username);
 		authRequest.setPassword("caires");
 
-		authMessage.handleMessage(authRequest, client, clients);
+		authMessageHandler.handleMessage(authRequest, client, clients);
 
 		verify(clients).put(username, client);
 	}
@@ -76,7 +76,7 @@ class AuthMessageTest {
 		authRequest.setUsername("not_pedro");
 		authRequest.setPassword("caires");
 
-		authMessage.handleMessage(authRequest, client, clients);
+		authMessageHandler.handleMessage(authRequest, client, clients);
 
 		verify(authentication).setAuthenticated(false);
 	}
@@ -88,7 +88,7 @@ class AuthMessageTest {
 		authRequest.setUsername(username);
 		authRequest.setPassword("caires");
 
-		authMessage.handleMessage(authRequest, client, clients);
+		authMessageHandler.handleMessage(authRequest, client, clients);
 
 		verify(clients, never()).put(any(), any());
 	}
@@ -99,7 +99,7 @@ class AuthMessageTest {
 		authRequest.setUsername("pedro");
 		authRequest.setPassword("caires");
 
-		var authResponse = authMessage.handleMessage(authRequest, client, clients).get();
+		var authResponse = authMessageHandler.handleMessage(authRequest, client, clients).get();
 
 		assertTrue(authResponse.getMessage().isOk());
 		assertTrue(authResponse.getClients().contains(client));
@@ -111,7 +111,7 @@ class AuthMessageTest {
 		authRequest.setUsername("not_pedro");
 		authRequest.setPassword("caires");
 
-		var authResponse = authMessage.handleMessage(authRequest, client, clients).get();
+		var authResponse = authMessageHandler.handleMessage(authRequest, client, clients).get();
 
 		assertFalse(authResponse.getMessage().isOk());
 		assertTrue(authResponse.getClients().contains(client));
