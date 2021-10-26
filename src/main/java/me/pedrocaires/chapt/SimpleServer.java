@@ -7,6 +7,8 @@ import me.pedrocaires.chapt.handler.MessageHandlerDecider;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
@@ -15,6 +17,8 @@ import java.util.Map;
 
 @Component
 public class SimpleServer extends WebSocketServer {
+
+	public static final Logger LOGGER = LoggerFactory.getLogger(SimpleServer.class);
 
 	private final MessageHandlerDecider messageHandlerDecider;
 
@@ -49,16 +53,14 @@ public class SimpleServer extends WebSocketServer {
 			optionalBroadcast.ifPresent(broadcast -> broadcast(broadcast.getMessage(), broadcast.getClients()));
 			System.out.println("Broadcasted");
 		}
-		catch (JsonProcessingException e) {
-			e.printStackTrace();
+		catch (JsonProcessingException ex) {
 			throw new UnexpectedException();
 		}
 	}
 
 	@Override
 	public void onError(WebSocket client, Exception ex) {
-		ex.printStackTrace();
-		System.err.println("an error occurred on clientection " + ":" + ex);
+		LOGGER.error("an error occurred", ex);
 	}
 
 	@Override

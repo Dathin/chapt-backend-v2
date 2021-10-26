@@ -17,6 +17,7 @@
         <java-websocket.version>1.5.1</java-websocket.version>
         <spring-context.version>5.3.10</spring-context.version>
         <jackson.version>2.13.0</jackson.version>
+        <logback.version>1.2.3</logback.version>
         <!--    TESTS    -->
         <jhusky.version>1.0.1</jhusky.version>
         <junit.version>5.7.2</junit.version>
@@ -45,6 +46,16 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
         </dependency>
         <!--   TEST    -->
         <dependency>
