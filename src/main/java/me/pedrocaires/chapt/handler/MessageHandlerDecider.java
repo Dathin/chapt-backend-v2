@@ -49,6 +49,7 @@ public class MessageHandlerDecider {
 		String handlerString = handler.toString();
 		var handlerEnum = Handler.fromString(handlerString.replaceAll("\"", ""));
 		authenticationFilter.doFilter(client, handlerEnum);
+		//TODO: Should be refactored to another class
 		if (handlerEnum == Handler.AUTH) {
 			var parsedMessage = objectMapper.readValue(message, AuthRequestDTO.class);
 			var messageResponse = authMessage.handleMessage(parsedMessage, client, clients);

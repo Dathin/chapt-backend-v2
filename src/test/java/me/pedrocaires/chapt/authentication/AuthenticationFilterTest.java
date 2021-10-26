@@ -25,36 +25,36 @@ class AuthenticationFilterTest {
 	@InjectMocks
 	AuthenticationFilter authenticationFilter;
 
-	WebSocketImpl webSocket;
+	WebSocketImpl client;
 
 	WebSocketAttachment webSocketAttachment;
 
 	@BeforeEach
 	void beforeEach() {
-		webSocket = new WebSocketImpl(webSocketListener, Arrays.asList());
+		client = new WebSocketImpl(webSocketListener, Arrays.asList());
 		webSocketAttachment = new WebSocketAttachment();
-		webSocket.setAttachment(webSocketAttachment);
+		client.setAttachment(webSocketAttachment);
 	}
 
 	@Test
 	void shouldPassAuthenticationFilter() {
 		webSocketAttachment.getAuthenticationFilter().setAuthenticated(true);
 
-		assertDoesNotThrow(() -> authenticationFilter.doFilter(webSocket, Handler.DIRECT));
+		assertDoesNotThrow(() -> authenticationFilter.doFilter(client, Handler.DIRECT));
 	}
 
 	@Test
 	void shouldPassAuthenticationFilterWhenTryingTo() {
 		webSocketAttachment.getAuthenticationFilter().setAuthenticated(false);
 
-		assertDoesNotThrow(() -> authenticationFilter.doFilter(webSocket, Handler.AUTH));
+		assertDoesNotThrow(() -> authenticationFilter.doFilter(client, Handler.AUTH));
 	}
 
 	@Test
 	void shouldThrowWhenNotAuthenticatedAndNotTryingTo() {
 		webSocketAttachment.getAuthenticationFilter().setAuthenticated(false);
 
-		assertThrows(UnauthenticatedException.class, () -> authenticationFilter.doFilter(webSocket, Handler.DIRECT));
+		assertThrows(UnauthenticatedException.class, () -> authenticationFilter.doFilter(client, Handler.DIRECT));
 	}
 
 }
