@@ -1,5 +1,7 @@
 package me.pedrocaires.chapt.handler.message.direct;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import me.pedrocaires.chapt.handler.transformer.BroadcastToSerializableBroadcast;
 import org.java_websocket.WebSocket;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,16 +19,22 @@ class DirectMessageHandlerTest {
 	@Mock
 	WebSocket client;
 
+	@Mock
+	ObjectMapper objectMapper;
+
+	@Mock
+	BroadcastToSerializableBroadcast broadcastToSerializableBroadcast;
+
 	@InjectMocks
-	DirectMessageHandler directMessage;
+	DirectMessageExecutor directMessageExecutor;
 
 	@Test
 	void shouldReturnUserToBroadcastMessage() {
 		var directDTO = new DirectDTO();
 		directDTO.setTo("user123");
 
-		var response = directMessage.handleMessage(directDTO, client, Collections.singletonMap("user123", client))
-				.get();
+		var response = directMessageExecutor
+				.handleMessage(directDTO, client, Collections.singletonMap("user123", client)).get();
 
 		assertEquals(directDTO, response.getMessage());
 		assertEquals(1, response.getClients().size());
@@ -37,7 +45,7 @@ class DirectMessageHandlerTest {
 		var directDTO = new DirectDTO();
 		directDTO.setTo("user123");
 
-		var response = directMessage.handleMessage(directDTO, client, Collections.emptyMap()).get();
+		var response = directMessageExecutor.handleMessage(directDTO, client, Collections.emptyMap()).get();
 
 		assertEquals(0, response.getClients().size());
 	}

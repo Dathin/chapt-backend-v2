@@ -3,36 +3,40 @@ package me.pedrocaires.chapt.handler.message;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.pedrocaires.chapt.handler.BaseMessageDTO;
+import me.pedrocaires.chapt.handler.Broadcast;
 import me.pedrocaires.chapt.handler.SerializableBroadcast;
 import me.pedrocaires.chapt.handler.transformer.BroadcastToSerializableBroadcast;
 import org.java_websocket.WebSocket;
-import org.springframework.stereotype.Component;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 import java.util.Optional;
 
-@Component
-public class MessageExecutor {
+public abstract class MessageExecutor<I extends BaseMessageDTO, O extends BaseMessageDTO> {
 
-	private final ObjectMapper objectMapper;
+    private final Class<I> iClass;
 
-	private final BroadcastToSerializableBroadcast broadcastToSerializableBroadcast;
+    private final ObjectMapper objectMapper;
 
-	public MessageExecutor(ObjectMapper objectMapper,
-			BroadcastToSerializableBroadcast broadcastToSerializableBroadcast) {
-		this.objectMapper = objectMapper;
-		this.broadcastToSerializableBroadcast = broadcastToSerializableBroadcast;
-	}
+    private final BroadcastToSerializableBroadcast broadcastToSerializableBroadcast;
 
-	public <I extends BaseMessageDTO, O extends BaseMessageDTO> Optional<SerializableBroadcast> execute(
-			MessageHandler<I, O> messageHandler, String message, WebSocket client, Map<String, WebSocket> clients,
-			Class<I> iClass, Class<O> oClass) throws JsonProcessingException {
-		var parsedMessage = (I) objectMapper.readValue(message, iClass);
-		var messageResponse = messageHandler.handleMessage(parsedMessage, client, clients);
-		if (messageResponse.isPresent()) {
-			return broadcastToSerializableBroadcast.transform(messageResponse);
-		}
-		return Optional.empty();
-	}
+    public MessageExecutor(ObjectMapper objectMapper,
+                           BroadcastToSerializableBroadcast broadcastToSerializableBroadcast) {
+        this.iClass = ((Class<I>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
+        this.objectMapper = objectMapper;
+        this.broadcastToSerializableBroadcast = broadcastToSerializableBroadcast;
+    }
+
+    public abstract Optional<Broadcast<O>> handleMessage(I message, WebSocket client, Map<String, WebSocket> clients);
+
+    public Optional<SerializableBroadcast> execute(String message, WebSocket client, Map<String, WebSocket> clients)
+            throws JsonProcessingException {
+        var parsedMessage = (I) objectMapper.readValue(message, iClass);
+        var messageResponse = handleMessage(parsedMessage, client, clients);
+        if (messageResponse.isPresent()) {
+            return broadcastToSerializableBroadcast.transform(messageResponse);
+        }
+        return Optional.empty();
+    }
 
 }

@@ -1,7 +1,9 @@
 package me.pedrocaires.chapt.handler.message.auth;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.pedrocaires.chapt.authentication.Authentication;
 import me.pedrocaires.chapt.authentication.WebSocketAttachment;
+import me.pedrocaires.chapt.handler.transformer.BroadcastToSerializableBroadcast;
 import org.java_websocket.WebSocket;
 import org.java_websocket.WebSocketImpl;
 import org.java_websocket.WebSocketListener;
@@ -22,11 +24,17 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class AuthMessageHandlerTest {
+class AuthMessageExecutorTest {
 
 	WebSocketImpl client;
 
 	WebSocketAttachment webSocketAttachment;
+
+	@Mock
+	ObjectMapper objectMapper;
+
+	@Mock
+	BroadcastToSerializableBroadcast broadcastToSerializableBroadcast;
 
 	@Mock
 	WebSocketListener webSocketListener;
@@ -38,7 +46,7 @@ class AuthMessageHandlerTest {
 	Map<String, WebSocket> clients;
 
 	@InjectMocks
-	AuthMessageHandler authMessageHandler;
+	AuthMessageExecutor authMessageExecutor;
 
 	@BeforeEach
 	void beforeEach() {
@@ -53,7 +61,7 @@ class AuthMessageHandlerTest {
 		authRequest.setUsername("pedro");
 		authRequest.setPassword("caires");
 
-		authMessageHandler.handleMessage(authRequest, client, clients);
+		authMessageExecutor.handleMessage(authRequest, client, clients);
 
 		verify(authentication).setAuthenticated(true);
 	}
@@ -65,7 +73,7 @@ class AuthMessageHandlerTest {
 		authRequest.setUsername(username);
 		authRequest.setPassword("caires");
 
-		authMessageHandler.handleMessage(authRequest, client, clients);
+		authMessageExecutor.handleMessage(authRequest, client, clients);
 
 		verify(clients).put(username, client);
 	}
@@ -76,7 +84,7 @@ class AuthMessageHandlerTest {
 		authRequest.setUsername("not_pedro");
 		authRequest.setPassword("caires");
 
-		authMessageHandler.handleMessage(authRequest, client, clients);
+		authMessageExecutor.handleMessage(authRequest, client, clients);
 
 		verify(authentication).setAuthenticated(false);
 	}
@@ -88,7 +96,7 @@ class AuthMessageHandlerTest {
 		authRequest.setUsername(username);
 		authRequest.setPassword("caires");
 
-		authMessageHandler.handleMessage(authRequest, client, clients);
+		authMessageExecutor.handleMessage(authRequest, client, clients);
 
 		verify(clients, never()).put(any(), any());
 	}
@@ -99,7 +107,7 @@ class AuthMessageHandlerTest {
 		authRequest.setUsername("pedro");
 		authRequest.setPassword("caires");
 
-		var authResponse = authMessageHandler.handleMessage(authRequest, client, clients).get();
+		var authResponse = authMessageExecutor.handleMessage(authRequest, client, clients).get();
 
 		assertTrue(authResponse.getMessage().isOk());
 		assertTrue(authResponse.getClients().contains(client));
@@ -111,7 +119,7 @@ class AuthMessageHandlerTest {
 		authRequest.setUsername("not_pedro");
 		authRequest.setPassword("caires");
 
-		var authResponse = authMessageHandler.handleMessage(authRequest, client, clients).get();
+		var authResponse = authMessageExecutor.handleMessage(authRequest, client, clients).get();
 
 		assertFalse(authResponse.getMessage().isOk());
 		assertTrue(authResponse.getClients().contains(client));

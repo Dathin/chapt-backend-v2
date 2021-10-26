@@ -5,22 +5,22 @@ import me.pedrocaires.chapt.handler.Handler;
 
 public class AuthResponseDTO extends BaseMessageDTO {
 
-	public AuthResponseDTO() {
-	}
+    private boolean ok;
 
-	public AuthResponseDTO(boolean ok) {
-		super(Handler.AUTH.toString());
-		this.ok = ok;
-	}
+    public AuthResponseDTO() {
+    }
 
-	private boolean ok;
+    public AuthResponseDTO(boolean ok) {
+        super(Handler.AUTH.toString());
+        this.ok = ok;
+    }
 
-	public boolean isOk() {
-		return ok;
-	}
+    public boolean isOk() {
+        return ok;
+    }
 
-	public void setOk(boolean ok) {
-		this.ok = ok;
-	}
+    public void setOk(boolean ok) {
+        this.ok = ok;
+    }
 
 }
