@@ -59,4 +59,5 @@ class UserRepositoryTest {
 
 		verify(jdbcTemplate).update(UserRepository.CREATE_USER_QUERY, username, password);
 	}
+
 }
