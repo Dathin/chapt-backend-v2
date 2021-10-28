@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import me.pedrocaires.chapt.authentication.AuthenticationFilter;
 import me.pedrocaires.chapt.exception.UnexpectedException;
-import me.pedrocaires.chapt.handler.message.MessageExecutor;
 import me.pedrocaires.chapt.handler.message.auth.AuthMessageExecutor;
 import me.pedrocaires.chapt.handler.message.direct.DirectMessageExecutor;
 import org.java_websocket.WebSocket;
@@ -83,36 +82,30 @@ class MessageHandlerHandlerDeciderTest {
 				() -> messageHandlerDecider.decide(message, client, Collections.singletonMap("user", client)));
 	}
 
-	// @Test
-	// void shouldCallAuthExecutor() throws JsonProcessingException {
-	// var message = "";
-	// var clients = Collections.singletonMap("user", client);
-	// when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
-	// when(objectNode.get("handler")).thenReturn(jsonNode);
-	// when(jsonNode.toString()).thenReturn("\"AUTH\"");
-	//
-	// messageHandlerDecider.decide(message, client, clients);
-	//
-	// verify(messageExecutor).execute(authMessageHandler, message, client, clients,
-	// AuthRequestDTO.class,
-	// AuthResponseDTO.class);
-	// }
+	@Test
+	void shouldCallAuthExecutor() throws JsonProcessingException {
+		var message = "";
+		var clients = Collections.singletonMap("user", client);
+		when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
+		when(objectNode.get("handler")).thenReturn(jsonNode);
+		when(jsonNode.toString()).thenReturn("\"AUTH\"");
 
-	// @Test
-	// void shouldCallDirectExecutor() throws JsonProcessingException {
-	// var message = "";
-	// var clients = Collections.singletonMap("user", client);
-	// when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
-	// when(objectNode.get("handler")).thenReturn(jsonNode);
-	// when(jsonNode.toString()).thenReturn("\"DIRECT\"");
-	//
-	// messageHandlerDecider.decide(message, client, clients);
-	//
-	// verify(messageExecutor).execute(directMessageHandler, message, client, clients,
-	// DirectDTO.class,
-	// DirectDTO.class);
-	// }
+		messageHandlerDecider.decide(message, client, clients);
 
-	// TODO: test AUTH AND DIRECT BEING CALLED
+		verify(authMessageExecutor).execute(message, client, clients);
+	}
+
+	@Test
+	void shouldCallDirectExecutor() throws JsonProcessingException {
+		var message = "";
+		var clients = Collections.singletonMap("user", client);
+		when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
+		when(objectNode.get("handler")).thenReturn(jsonNode);
+		when(jsonNode.toString()).thenReturn("\"DIRECT\"");
+
+		messageHandlerDecider.decide(message, client, clients);
+
+		verify(directMessageExecutor).execute(message, client, clients);
+	}
 
 }

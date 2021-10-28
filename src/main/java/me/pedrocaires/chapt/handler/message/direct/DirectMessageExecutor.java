@@ -5,14 +5,14 @@ import me.pedrocaires.chapt.handler.Broadcast;
 import me.pedrocaires.chapt.handler.message.MessageExecutor;
 import me.pedrocaires.chapt.handler.transformer.BroadcastToSerializableBroadcast;
 import org.java_websocket.WebSocket;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
-@Component
+@Service
 public class DirectMessageExecutor extends MessageExecutor<DirectDTO, DirectDTO> {
 
 	public DirectMessageExecutor(ObjectMapper objectMapper,

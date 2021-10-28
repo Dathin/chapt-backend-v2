@@ -6,4 +6,8 @@ public class UnexpectedException extends RuntimeException {
 		super("Something unusual happened, closing connection");
 	}
 
+	public UnexpectedException(String message) {
+		super(message);
+	}
+
 }
