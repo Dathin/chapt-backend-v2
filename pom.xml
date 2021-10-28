@@ -16,8 +16,11 @@
         <!--    DEPENDENCIES    -->
         <java-websocket.version>1.5.1</java-websocket.version>
         <spring-context.version>5.3.10</spring-context.version>
+        <spring-jdbc.version>5.3.12</spring-jdbc.version>
+        <postgres-jdbc.version>42.2.24</postgres-jdbc.version>
+        <hikari.version>5.0.0</hikari.version>
         <jackson.version>2.13.0</jackson.version>
-        <logback.version>1.2.3</logback.version>
+        <logback.version>1.2.6</logback.version>
         <!--    TESTS    -->
         <jhusky.version>1.0.1</jhusky.version>
         <junit.version>5.7.2</junit.version>
@@ -41,6 +44,21 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring-context.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring-jdbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgres-jdbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${hikari.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.pedrocaires.chapt.authentication.Authentication;
 import me.pedrocaires.chapt.authentication.WebSocketAttachment;
 import me.pedrocaires.chapt.handler.transformer.BroadcastToSerializableBroadcast;
+import me.pedrocaires.chapt.repository.user.User;
+import me.pedrocaires.chapt.repository.user.UserRepository;
 import org.java_websocket.WebSocket;
 import org.java_websocket.WebSocketImpl;
 import org.java_websocket.WebSocketListener;
@@ -16,12 +18,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AuthMessageExecutorTest {
@@ -29,6 +31,12 @@ class AuthMessageExecutorTest {
 	WebSocketImpl client;
 
 	WebSocketAttachment webSocketAttachment;
+
+	@Mock
+	User user;
+
+	@Mock
+	UserRepository userRepository;
 
 	@Mock
 	ObjectMapper objectMapper;
@@ -60,6 +68,8 @@ class AuthMessageExecutorTest {
 		var authRequest = new AuthRequestDTO();
 		authRequest.setUsername("pedro");
 		authRequest.setPassword("caires");
+		when(userRepository.findUserByUsernameAndPassword(authRequest.getUsername(), authRequest.getPassword()))
+				.thenReturn(Optional.of(user));
 
 		authMessageExecutor.handleMessage(authRequest, client, clients);
 
@@ -72,6 +82,8 @@ class AuthMessageExecutorTest {
 		var username = "pedro";
 		authRequest.setUsername(username);
 		authRequest.setPassword("caires");
+		when(userRepository.findUserByUsernameAndPassword(authRequest.getUsername(), authRequest.getPassword()))
+				.thenReturn(Optional.of(user));
 
 		authMessageExecutor.handleMessage(authRequest, client, clients);
 
@@ -83,6 +95,8 @@ class AuthMessageExecutorTest {
 		var authRequest = new AuthRequestDTO();
 		authRequest.setUsername("not_pedro");
 		authRequest.setPassword("caires");
+		when(userRepository.findUserByUsernameAndPassword(authRequest.getUsername(), authRequest.getPassword()))
+				.thenReturn(Optional.empty());
 
 		authMessageExecutor.handleMessage(authRequest, client, clients);
 
@@ -95,6 +109,8 @@ class AuthMessageExecutorTest {
 		var username = "not_pedro";
 		authRequest.setUsername(username);
 		authRequest.setPassword("caires");
+		when(userRepository.findUserByUsernameAndPassword(authRequest.getUsername(), authRequest.getPassword()))
+				.thenReturn(Optional.empty());
 
 		authMessageExecutor.handleMessage(authRequest, client, clients);
 
@@ -106,6 +122,8 @@ class AuthMessageExecutorTest {
 		var authRequest = new AuthRequestDTO();
 		authRequest.setUsername("pedro");
 		authRequest.setPassword("caires");
+		when(userRepository.findUserByUsernameAndPassword(authRequest.getUsername(), authRequest.getPassword()))
+				.thenReturn(Optional.of(user));
 
 		var authResponse = authMessageExecutor.handleMessage(authRequest, client, clients).get();
 
@@ -118,6 +136,8 @@ class AuthMessageExecutorTest {
 		var authRequest = new AuthRequestDTO();
 		authRequest.setUsername("not_pedro");
 		authRequest.setPassword("caires");
+		when(userRepository.findUserByUsernameAndPassword(authRequest.getUsername(), authRequest.getPassword()))
+				.thenReturn(Optional.empty());
 
 		var authResponse = authMessageExecutor.handleMessage(authRequest, client, clients).get();
 
