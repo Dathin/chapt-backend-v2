@@ -18,26 +18,31 @@ import java.util.Optional;
 @Service
 public class CreateUserMessageExecutor extends MessageExecutor<UserInfoDTO, AckResponseDTO> {
 
-    private final UserRepository userRepository;
+	private final UserRepository userRepository;
 
-    private final AuthMessageExecutor authMessageExecutor;
+	private final AuthMessageExecutor authMessageExecutor;
 
-    protected CreateUserMessageExecutor(ObjectMapper objectMapper, BroadcastToSerializableBroadcast broadcastToSerializableBroadcast, UserRepository userRepository, AuthMessageExecutor authMessageExecutor) {
-        super(objectMapper, broadcastToSerializableBroadcast);
-        this.userRepository = userRepository;
-        this.authMessageExecutor = authMessageExecutor;
-    }
+	protected CreateUserMessageExecutor(ObjectMapper objectMapper,
+			BroadcastToSerializableBroadcast broadcastToSerializableBroadcast, UserRepository userRepository,
+			AuthMessageExecutor authMessageExecutor) {
+		super(objectMapper, broadcastToSerializableBroadcast);
+		this.userRepository = userRepository;
+		this.authMessageExecutor = authMessageExecutor;
+	}
 
-    @Override
-    public Optional<Broadcast<AckResponseDTO>> handleMessage(UserInfoDTO message, WebSocket client, Map<String, WebSocket> clients) {
-        var ackResponseDTO = new AckResponseDTO();
-        try {
-            userRepository.createUser(message.getUsername(), message.getPassword());
-            authMessageExecutor.handleMessage(message, client, clients);
-            ackResponseDTO.setOk(true);
-        } catch (Exception ex){
-            ackResponseDTO.setOk(false);
-        }
-        return Optional.of(new Broadcast<>(ackResponseDTO, Collections.singletonList(client)));
-    }
+	@Override
+	public Optional<Broadcast<AckResponseDTO>> handleMessage(UserInfoDTO message, WebSocket client,
+			Map<String, WebSocket> clients) {
+		var ackResponseDTO = new AckResponseDTO();
+		try {
+			userRepository.createUser(message.getUsername(), message.getPassword());
+			authMessageExecutor.handleMessage(message, client, clients);
+			ackResponseDTO.setOk(true);
+		}
+		catch (Exception ex) {
+			ackResponseDTO.setOk(false);
+		}
+		return Optional.of(new Broadcast<>(ackResponseDTO, Collections.singletonList(client)));
+	}
+
 }

@@ -28,7 +28,8 @@ public class MessageHandlerDecider {
 	private final AuthenticationFilter authenticationFilter;
 
 	public MessageHandlerDecider(AuthMessageExecutor authMessageExecutor, DirectMessageExecutor directMessageExecutor,
-								 CreateUserMessageExecutor createUserMessageExecutor, ObjectMapper objectMapper, AuthenticationFilter authenticationFilter) {
+			CreateUserMessageExecutor createUserMessageExecutor, ObjectMapper objectMapper,
+			AuthenticationFilter authenticationFilter) {
 		this.authMessageExecutor = authMessageExecutor;
 		this.directMessageExecutor = directMessageExecutor;
 		this.createUserMessageExecutor = createUserMessageExecutor;

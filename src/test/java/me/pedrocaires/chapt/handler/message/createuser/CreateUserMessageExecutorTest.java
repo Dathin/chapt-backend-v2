@@ -20,46 +20,50 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class CreateUserMessageExecutorTest {
 
-    @Mock
-    WebSocket client;
+	@Mock
+	WebSocket client;
 
-    @Mock
-    UserRepository userRepository;
+	@Mock
+	UserRepository userRepository;
 
-    @Mock
-    AuthMessageExecutor authMessageExecutor;
+	@Mock
+	AuthMessageExecutor authMessageExecutor;
 
-    @InjectMocks
-    CreateUserMessageExecutor createUserMessageExecutor;
+	@InjectMocks
+	CreateUserMessageExecutor createUserMessageExecutor;
 
-    @Test
-    void shouldReturnOkAckResponse() {
-        var userInfoDTO = new UserInfoDTO();
+	@Test
+	void shouldReturnOkAckResponse() {
+		var userInfoDTO = new UserInfoDTO();
 
-        var ackResponse = createUserMessageExecutor.handleMessage(userInfoDTO, client, Collections.singletonMap("user123", client)).get();
+		var ackResponse = createUserMessageExecutor
+				.handleMessage(userInfoDTO, client, Collections.singletonMap("user123", client)).get();
 
-        assertTrue(ackResponse.getMessage().isOk());
-        assertTrue(ackResponse.getClients().contains(client));
-    }
+		assertTrue(ackResponse.getMessage().isOk());
+		assertTrue(ackResponse.getClients().contains(client));
+	}
 
-    @Test
-    void shouldAuthenticateAfterCreatingUser() {
-        var userInfoDTO = new UserInfoDTO();
-        var clients = Collections.singletonMap("user123", client);
+	@Test
+	void shouldAuthenticateAfterCreatingUser() {
+		var userInfoDTO = new UserInfoDTO();
+		var clients = Collections.singletonMap("user123", client);
 
-        var ackResponse = createUserMessageExecutor.handleMessage(userInfoDTO, client, clients).get();
+		var ackResponse = createUserMessageExecutor.handleMessage(userInfoDTO, client, clients).get();
 
-        verify(authMessageExecutor).handleMessage(userInfoDTO, client, clients);
-    }
+		verify(authMessageExecutor).handleMessage(userInfoDTO, client, clients);
+	}
 
-    @Test
-    void shouldReturnNotOkAckResponse() {
-        var userInfoDTO = new UserInfoDTO();
-        doThrow(RuntimeException.class).when(userRepository).createUser(userInfoDTO.getUsername(), userInfoDTO.getPassword());
+	@Test
+	void shouldReturnNotOkAckResponse() {
+		var userInfoDTO = new UserInfoDTO();
+		doThrow(RuntimeException.class).when(userRepository).createUser(userInfoDTO.getUsername(),
+				userInfoDTO.getPassword());
 
-        var ackResponse = createUserMessageExecutor.handleMessage(userInfoDTO, client, Collections.singletonMap("user123", client)).get();
+		var ackResponse = createUserMessageExecutor
+				.handleMessage(userInfoDTO, client, Collections.singletonMap("user123", client)).get();
 
-        assertFalse(ackResponse.getMessage().isOk());
-        assertTrue(ackResponse.getClients().contains(client));
-    }
+		assertFalse(ackResponse.getMessage().isOk());
+		assertTrue(ackResponse.getClients().contains(client));
+	}
+
 }
