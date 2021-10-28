@@ -51,7 +51,7 @@ public class BeanConfig {
 	private Properties getProperties() {
 		var environment = System.getenv("ENV");
 		var applicationPropsPath = environment == null ? "application.properties"
-				: String.format("application-%s.properties");
+				: String.format("application-%s.properties", environment);
 		try (InputStream input = BeanConfig.class.getClassLoader().getResourceAsStream(applicationPropsPath)) {
 			var properties = new Properties();
 			properties.load(input);
