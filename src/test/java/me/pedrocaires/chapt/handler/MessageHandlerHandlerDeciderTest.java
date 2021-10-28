@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import me.pedrocaires.chapt.authentication.AuthenticationFilter;
 import me.pedrocaires.chapt.exception.UnexpectedException;
 import me.pedrocaires.chapt.handler.message.auth.AuthMessageExecutor;
+import me.pedrocaires.chapt.handler.message.createuser.CreateUserMessageExecutor;
 import me.pedrocaires.chapt.handler.message.direct.DirectMessageExecutor;
 import org.java_websocket.WebSocket;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,9 @@ class MessageHandlerHandlerDeciderTest {
 
 	@Mock
 	DirectMessageExecutor directMessageExecutor;
+
+	@Mock
+	CreateUserMessageExecutor createUserMessageExecutor;
 
 	@Mock
 	AuthenticationFilter authenticationFilter;
@@ -106,6 +110,19 @@ class MessageHandlerHandlerDeciderTest {
 		messageHandlerDecider.decide(message, client, clients);
 
 		verify(directMessageExecutor).execute(message, client, clients);
+	}
+
+	@Test
+	void shouldCallCreateUserExecutor() throws JsonProcessingException {
+		var message = "";
+		var clients = Collections.singletonMap("user", client);
+		when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
+		when(objectNode.get("handler")).thenReturn(jsonNode);
+		when(jsonNode.toString()).thenReturn("\"CREATE_USER\"");
+
+		messageHandlerDecider.decide(message, client, clients);
+
+		verify(createUserMessageExecutor).execute(message, client, clients);
 	}
 
 }

@@ -44,10 +44,17 @@ class AuthenticationFilterTest {
 	}
 
 	@Test
-	void shouldPassAuthenticationFilterWhenTryingTo() {
+	void shouldPassAuthenticationFilterWhenTryingToAuhenticate() {
 		webSocketAttachment.getAuthenticationFilter().setAuthenticated(false);
 
 		assertDoesNotThrow(() -> authenticationFilter.doFilter(client, Handler.AUTH));
+	}
+
+	@Test
+	void shouldPassAuthenticationFilterWhenTryingToRegister() {
+		webSocketAttachment.getAuthenticationFilter().setAuthenticated(false);
+
+		assertDoesNotThrow(() -> authenticationFilter.doFilter(client, Handler.CREATE_USER));
 	}
 
 	@Test

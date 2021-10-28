@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.pedrocaires.chapt.authentication.WebSocketAttachment;
 import me.pedrocaires.chapt.handler.Broadcast;
 import me.pedrocaires.chapt.handler.message.MessageExecutor;
+import me.pedrocaires.chapt.handler.message.shareddto.AckResponseDTO;
+import me.pedrocaires.chapt.handler.message.shareddto.UserInfoDTO;
 import me.pedrocaires.chapt.handler.transformer.BroadcastToSerializableBroadcast;
 import me.pedrocaires.chapt.repository.user.UserRepository;
 import org.java_websocket.WebSocket;
@@ -14,7 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class AuthMessageExecutor extends MessageExecutor<AuthRequestDTO, AuthResponseDTO> {
+public class AuthMessageExecutor extends MessageExecutor<UserInfoDTO, AckResponseDTO> {
 
 	private final UserRepository userRepository;
 
@@ -25,14 +27,14 @@ public class AuthMessageExecutor extends MessageExecutor<AuthRequestDTO, AuthRes
 	}
 
 	@Override
-	public Optional<Broadcast<AuthResponseDTO>> handleMessage(AuthRequestDTO message, WebSocket client,
+	public Optional<Broadcast<AckResponseDTO>> handleMessage(UserInfoDTO message, WebSocket client,
 			Map<String, WebSocket> clients) {
 		var authenticated = userRepository.findUserByUsernameAndPassword(message.getUsername(), message.getPassword())
 				.isPresent();
 		var webSocketAttachment = (WebSocketAttachment) client.getAttachment();
 		var authentication = webSocketAttachment.getAuthenticationFilter();
 		authentication.setAuthenticated(authenticated);
-		var authResponse = new AuthResponseDTO(authenticated);
+		var authResponse = new AckResponseDTO(authenticated);
 		if (authenticated) {
 			clients.put(message.getUsername(), client);
 		}

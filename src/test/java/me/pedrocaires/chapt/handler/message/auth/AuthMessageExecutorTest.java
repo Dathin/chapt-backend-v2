@@ -3,6 +3,7 @@ package me.pedrocaires.chapt.handler.message.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.pedrocaires.chapt.authentication.Authentication;
 import me.pedrocaires.chapt.authentication.WebSocketAttachment;
+import me.pedrocaires.chapt.handler.message.shareddto.UserInfoDTO;
 import me.pedrocaires.chapt.handler.transformer.BroadcastToSerializableBroadcast;
 import me.pedrocaires.chapt.repository.user.User;
 import me.pedrocaires.chapt.repository.user.UserRepository;
@@ -65,7 +66,7 @@ class AuthMessageExecutorTest {
 
 	@Test
 	void shouldPersistAtUserContextWhenAuthenticated() {
-		var authRequest = new AuthRequestDTO();
+		var authRequest = new UserInfoDTO();
 		authRequest.setUsername("pedro");
 		authRequest.setPassword("caires");
 		when(userRepository.findUserByUsernameAndPassword(authRequest.getUsername(), authRequest.getPassword()))
@@ -78,7 +79,7 @@ class AuthMessageExecutorTest {
 
 	@Test
 	void shouldPutClientAtListOfAuthenticatedClients() {
-		var authRequest = new AuthRequestDTO();
+		var authRequest = new UserInfoDTO();
 		var username = "pedro";
 		authRequest.setUsername(username);
 		authRequest.setPassword("caires");
@@ -92,7 +93,7 @@ class AuthMessageExecutorTest {
 
 	@Test
 	void shouldNotPersistAtUserContextWhenAuthenticated() {
-		var authRequest = new AuthRequestDTO();
+		var authRequest = new UserInfoDTO();
 		authRequest.setUsername("not_pedro");
 		authRequest.setPassword("caires");
 		when(userRepository.findUserByUsernameAndPassword(authRequest.getUsername(), authRequest.getPassword()))
@@ -105,7 +106,7 @@ class AuthMessageExecutorTest {
 
 	@Test
 	void shouldNotPutClientAtListOfAuthenticatedClients() {
-		var authRequest = new AuthRequestDTO();
+		var authRequest = new UserInfoDTO();
 		var username = "not_pedro";
 		authRequest.setUsername(username);
 		authRequest.setPassword("caires");
@@ -118,31 +119,31 @@ class AuthMessageExecutorTest {
 	}
 
 	@Test
-	void shouldReturnAuthenticatedResponse() {
-		var authRequest = new AuthRequestDTO();
+	void shouldReturnOkAckResponse() {
+		var authRequest = new UserInfoDTO();
 		authRequest.setUsername("pedro");
 		authRequest.setPassword("caires");
 		when(userRepository.findUserByUsernameAndPassword(authRequest.getUsername(), authRequest.getPassword()))
 				.thenReturn(Optional.of(user));
 
-		var authResponse = authMessageExecutor.handleMessage(authRequest, client, clients).get();
+		var ackResponse = authMessageExecutor.handleMessage(authRequest, client, clients).get();
 
-		assertTrue(authResponse.getMessage().isOk());
-		assertTrue(authResponse.getClients().contains(client));
+		assertTrue(ackResponse.getMessage().isOk());
+		assertTrue(ackResponse.getClients().contains(client));
 	}
 
 	@Test
-	void shouldReturnUnauthenticatedResponse() {
-		var authRequest = new AuthRequestDTO();
+	void shouldReturnNotOkAckResponse() {
+		var authRequest = new UserInfoDTO();
 		authRequest.setUsername("not_pedro");
 		authRequest.setPassword("caires");
 		when(userRepository.findUserByUsernameAndPassword(authRequest.getUsername(), authRequest.getPassword()))
 				.thenReturn(Optional.empty());
 
-		var authResponse = authMessageExecutor.handleMessage(authRequest, client, clients).get();
+		var ackResponse = authMessageExecutor.handleMessage(authRequest, client, clients).get();
 
-		assertFalse(authResponse.getMessage().isOk());
-		assertTrue(authResponse.getClients().contains(client));
+		assertFalse(ackResponse.getMessage().isOk());
+		assertTrue(ackResponse.getClients().contains(client));
 	}
 
 }

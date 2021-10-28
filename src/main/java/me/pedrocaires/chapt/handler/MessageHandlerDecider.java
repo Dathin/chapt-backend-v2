@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import me.pedrocaires.chapt.authentication.AuthenticationFilter;
 import me.pedrocaires.chapt.exception.UnexpectedException;
 import me.pedrocaires.chapt.handler.message.auth.AuthMessageExecutor;
+import me.pedrocaires.chapt.handler.message.createuser.CreateUserMessageExecutor;
 import me.pedrocaires.chapt.handler.message.direct.DirectMessageExecutor;
 import org.java_websocket.WebSocket;
 import org.springframework.stereotype.Component;
@@ -20,14 +21,18 @@ public class MessageHandlerDecider {
 
 	private final DirectMessageExecutor directMessageExecutor;
 
+	private final CreateUserMessageExecutor createUserMessageExecutor;
+
 	private final ObjectMapper objectMapper;
 
 	private final AuthenticationFilter authenticationFilter;
 
 	public MessageHandlerDecider(AuthMessageExecutor authMessageExecutor, DirectMessageExecutor directMessageExecutor,
-			ObjectMapper objectMapper, AuthenticationFilter authenticationFilter) {
+			CreateUserMessageExecutor createUserMessageExecutor, ObjectMapper objectMapper,
+			AuthenticationFilter authenticationFilter) {
 		this.authMessageExecutor = authMessageExecutor;
 		this.directMessageExecutor = directMessageExecutor;
+		this.createUserMessageExecutor = createUserMessageExecutor;
 		this.objectMapper = objectMapper;
 		this.authenticationFilter = authenticationFilter;
 	}
@@ -44,6 +49,9 @@ public class MessageHandlerDecider {
 		authenticationFilter.doFilter(client, handlerEnum);
 		if (handlerEnum == Handler.AUTH) {
 			return authMessageExecutor.execute(message, client, clients);
+		}
+		else if (handlerEnum == Handler.CREATE_USER) {
+			return createUserMessageExecutor.execute(message, client, clients);
 		}
 		else if (handlerEnum == Handler.DIRECT) {
 			return directMessageExecutor.execute(message, client, clients);

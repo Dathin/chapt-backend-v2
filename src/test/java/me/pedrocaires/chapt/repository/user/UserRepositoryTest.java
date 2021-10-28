@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,6 +48,16 @@ class UserRepositoryTest {
 		var foundUser = userRepository.findUserByUsernameAndPassword(username, password);
 
 		assertTrue(foundUser.isEmpty());
+	}
+
+	@Test
+	void shouldInsertUser() {
+		var username = "username";
+		var password = "password";
+
+		userRepository.createUser(username, password);
+
+		verify(jdbcTemplate).update(UserRepository.CREATE_USER_QUERY, username, password);
 	}
 
 }

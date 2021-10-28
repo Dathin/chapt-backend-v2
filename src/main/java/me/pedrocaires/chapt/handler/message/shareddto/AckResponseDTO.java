@@ -1,16 +1,16 @@
-package me.pedrocaires.chapt.handler.message.auth;
+package me.pedrocaires.chapt.handler.message.shareddto;
 
 import me.pedrocaires.chapt.handler.BaseMessageDTO;
 import me.pedrocaires.chapt.handler.Handler;
 
-public class AuthResponseDTO extends BaseMessageDTO {
+public class AckResponseDTO extends BaseMessageDTO {
 
 	private boolean ok;
 
-	public AuthResponseDTO() {
+	public AckResponseDTO() {
 	}
 
-	public AuthResponseDTO(boolean ok) {
+	public AckResponseDTO(boolean ok) {
 		super(Handler.AUTH.toString());
 		this.ok = ok;
 	}
