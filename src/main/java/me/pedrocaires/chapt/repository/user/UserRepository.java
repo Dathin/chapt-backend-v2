@@ -17,9 +17,16 @@ public class UserRepository {
 			"SELECT %s, %s FROM USERS WHERE %s=? AND %s=?", UserConstants.ID, UserConstants.USERNAME,
 			UserConstants.USERNAME, UserConstants.PASSWORD);
 
+	protected static String CREATE_USER_QUERY = String.format(
+			"INSERT INTO USERS (%s, %s) VALUES (?, ?)", UserConstants.USERNAME, UserConstants.PASSWORD);
+
 	public UserRepository(JdbcTemplate jdbcTemplate, UserRowMapper userRowMapper) {
 		this.jdbcTemplate = jdbcTemplate;
 		this.userRowMapper = userRowMapper;
+	}
+
+	public void createUser(String username, String password) {
+		jdbcTemplate.update(CREATE_USER_QUERY, username, password);
 	}
 
 	public Optional<User> findUserByUsernameAndPassword(String username, String password) {

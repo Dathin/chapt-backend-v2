@@ -1,8 +1,8 @@
-package me.pedrocaires.chapt.handler.message.auth;
+package me.pedrocaires.chapt.handler.message.shareddto;
 
 import me.pedrocaires.chapt.handler.BaseMessageDTO;
 
-public class AuthRequestDTO extends BaseMessageDTO {
+public class UserInfoDTO extends BaseMessageDTO {
 
 	private String username;
 
