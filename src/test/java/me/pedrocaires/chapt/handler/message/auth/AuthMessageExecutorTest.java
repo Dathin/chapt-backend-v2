@@ -52,7 +52,7 @@ class AuthMessageExecutorTest {
 	Authentication authentication;
 
 	@Mock
-	Map<String, WebSocket> clients;
+	Map<Integer, WebSocket> clients;
 
 	@InjectMocks
 	AuthMessageExecutor authMessageExecutor;
@@ -81,14 +81,16 @@ class AuthMessageExecutorTest {
 	void shouldPutClientAtListOfAuthenticatedClients() {
 		var authRequest = new UserInfoDTO();
 		var username = "pedro";
+		var userId = 1;
 		authRequest.setUsername(username);
 		authRequest.setPassword("caires");
 		when(userRepository.findUserByUsernameAndPassword(authRequest.getUsername(), authRequest.getPassword()))
 				.thenReturn(Optional.of(user));
+		when(user.getId()).thenReturn(userId);
 
 		authMessageExecutor.handleMessage(authRequest, client, clients);
 
-		verify(clients).put(username, client);
+		verify(clients).put(userId, client);
 	}
 
 	@Test

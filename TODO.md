@@ -1,3 +1,2 @@
 Message History
-Message persistence
 Client

@@ -32,7 +32,7 @@ public class CreateUserMessageExecutor extends MessageExecutor<UserInfoDTO, AckR
 
 	@Override
 	public Optional<Broadcast<AckResponseDTO>> handleMessage(UserInfoDTO message, WebSocket client,
-			Map<String, WebSocket> clients) {
+			Map<Integer, WebSocket> clients) {
 		var ackResponseDTO = new AckResponseDTO();
 		try {
 			userRepository.createUser(message.getUsername(), message.getPassword());

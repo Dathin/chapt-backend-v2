@@ -60,7 +60,7 @@ class MessageHandlerHandlerDeciderTest {
 		when(objectNode.get("handler")).thenReturn(null);
 
 		assertThrows(UnexpectedException.class,
-				() -> messageHandlerDecider.decide(message, client, Collections.singletonMap("user", client)));
+				() -> messageHandlerDecider.decide(message, client, Collections.singletonMap(1, client)));
 	}
 
 	@Test
@@ -70,7 +70,7 @@ class MessageHandlerHandlerDeciderTest {
 		when(objectNode.get("handler")).thenReturn(jsonNode);
 		when(jsonNode.toString()).thenReturn("\"AUTH\"");
 
-		messageHandlerDecider.decide(message, client, Collections.singletonMap("user", client));
+		messageHandlerDecider.decide(message, client, Collections.singletonMap(1, client));
 
 		verify(authenticationFilter).doFilter(any(), any());
 	}
@@ -83,13 +83,13 @@ class MessageHandlerHandlerDeciderTest {
 		when(jsonNode.toString()).thenReturn("\"NOTSURE\"");
 
 		assertThrows(UnexpectedException.class,
-				() -> messageHandlerDecider.decide(message, client, Collections.singletonMap("user", client)));
+				() -> messageHandlerDecider.decide(message, client, Collections.singletonMap(1, client)));
 	}
 
 	@Test
 	void shouldCallAuthExecutor() throws JsonProcessingException {
 		var message = "";
-		var clients = Collections.singletonMap("user", client);
+		var clients = Collections.singletonMap(1, client);
 		when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
 		when(objectNode.get("handler")).thenReturn(jsonNode);
 		when(jsonNode.toString()).thenReturn("\"AUTH\"");
@@ -102,7 +102,7 @@ class MessageHandlerHandlerDeciderTest {
 	@Test
 	void shouldCallDirectExecutor() throws JsonProcessingException {
 		var message = "";
-		var clients = Collections.singletonMap("user", client);
+		var clients = Collections.singletonMap(1, client);
 		when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
 		when(objectNode.get("handler")).thenReturn(jsonNode);
 		when(jsonNode.toString()).thenReturn("\"DIRECT\"");
@@ -115,7 +115,7 @@ class MessageHandlerHandlerDeciderTest {
 	@Test
 	void shouldCallCreateUserExecutor() throws JsonProcessingException {
 		var message = "";
-		var clients = Collections.singletonMap("user", client);
+		var clients = Collections.singletonMap(1, client);
 		when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
 		when(objectNode.get("handler")).thenReturn(jsonNode);
 		when(jsonNode.toString()).thenReturn("\"CREATE_USER\"");
