@@ -27,9 +27,9 @@ public abstract class MessageExecutor<I extends BaseMessageDTO, O extends BaseMe
 		this.broadcastToSerializableBroadcast = broadcastToSerializableBroadcast;
 	}
 
-	public abstract Optional<Broadcast<O>> handleMessage(I message, WebSocket client, Map<String, WebSocket> clients);
+	public abstract Optional<Broadcast<O>> handleMessage(I message, WebSocket client, Map<Integer, WebSocket> clients);
 
-	public Optional<SerializableBroadcast> execute(String message, WebSocket client, Map<String, WebSocket> clients)
+	public Optional<SerializableBroadcast> execute(String message, WebSocket client, Map<Integer, WebSocket> clients)
 			throws JsonProcessingException {
 		var parsedMessage = objectMapper.readValue(message, iClass);
 		var messageResponse = handleMessage(parsedMessage, client, clients);

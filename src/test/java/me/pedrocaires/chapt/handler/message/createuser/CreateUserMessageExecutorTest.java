@@ -37,7 +37,7 @@ class CreateUserMessageExecutorTest {
 		var userInfoDTO = new UserInfoDTO();
 
 		var ackResponse = createUserMessageExecutor
-				.handleMessage(userInfoDTO, client, Collections.singletonMap("user123", client)).get();
+				.handleMessage(userInfoDTO, client, Collections.singletonMap(1, client)).get();
 
 		assertTrue(ackResponse.getMessage().isOk());
 		assertTrue(ackResponse.getClients().contains(client));
@@ -46,7 +46,7 @@ class CreateUserMessageExecutorTest {
 	@Test
 	void shouldAuthenticateAfterCreatingUser() {
 		var userInfoDTO = new UserInfoDTO();
-		var clients = Collections.singletonMap("user123", client);
+		var clients = Collections.singletonMap(1, client);
 
 		var ackResponse = createUserMessageExecutor.handleMessage(userInfoDTO, client, clients).get();
 
@@ -60,7 +60,7 @@ class CreateUserMessageExecutorTest {
 				userInfoDTO.getPassword());
 
 		var ackResponse = createUserMessageExecutor
-				.handleMessage(userInfoDTO, client, Collections.singletonMap("user123", client)).get();
+				.handleMessage(userInfoDTO, client, Collections.singletonMap(1, client)).get();
 
 		assertFalse(ackResponse.getMessage().isOk());
 		assertTrue(ackResponse.getClients().contains(client));

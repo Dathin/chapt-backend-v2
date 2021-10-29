@@ -37,7 +37,7 @@ public class MessageHandlerDecider {
 		this.authenticationFilter = authenticationFilter;
 	}
 
-	public Optional<SerializableBroadcast> decide(String message, WebSocket client, Map<String, WebSocket> clients)
+	public Optional<SerializableBroadcast> decide(String message, WebSocket client, Map<Integer, WebSocket> clients)
 			throws JsonProcessingException {
 		var objectMessage = objectMapper.readValue(message, ObjectNode.class);
 		var handler = objectMessage.get("handler");

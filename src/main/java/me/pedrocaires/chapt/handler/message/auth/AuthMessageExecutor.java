@@ -28,15 +28,17 @@ public class AuthMessageExecutor extends MessageExecutor<UserInfoDTO, AckRespons
 
 	@Override
 	public Optional<Broadcast<AckResponseDTO>> handleMessage(UserInfoDTO message, WebSocket client,
-			Map<String, WebSocket> clients) {
-		var authenticated = userRepository.findUserByUsernameAndPassword(message.getUsername(), message.getPassword())
-				.isPresent();
+			Map<Integer, WebSocket> clients) {
+		var user = userRepository.findUserByUsernameAndPassword(message.getUsername(), message.getPassword());
+		var authenticated = user.isPresent();
 		var webSocketAttachment = (WebSocketAttachment) client.getAttachment();
 		var authentication = webSocketAttachment.getAuthenticationFilter();
 		authentication.setAuthenticated(authenticated);
 		var authResponse = new AckResponseDTO(authenticated);
 		if (authenticated) {
-			clients.put(message.getUsername(), client);
+			var userId = user.get().getId();
+			clients.put(userId, client);
+			authentication.setUserId(userId);
 		}
 		return Optional.of(new Broadcast<>(authResponse, Collections.singleton(client)));
 	}

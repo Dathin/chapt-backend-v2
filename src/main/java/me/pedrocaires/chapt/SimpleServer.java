@@ -22,7 +22,7 @@ public class SimpleServer extends WebSocketServer {
 
 	private final MessageHandlerDecider messageHandlerDecider;
 
-	private final Map<String, WebSocket> authenticatedSessions = new Hashtable<>();
+	private final Map<Integer, WebSocket> authenticatedSessions = new Hashtable<>();
 
 	public SimpleServer(InetSocketAddress address, MessageHandlerDecider messageHandlerDecider) {
 		super(address);
