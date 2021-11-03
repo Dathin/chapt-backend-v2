@@ -34,6 +34,7 @@ public class CreateUserMessageExecutor extends MessageExecutor<UserInfoDTO, AckR
 	public Optional<Broadcast<AckResponseDTO>> handleMessage(UserInfoDTO message, WebSocket client,
 			Map<Integer, WebSocket> clients) {
 		var ackResponseDTO = new AckResponseDTO();
+		ackResponseDTO.setHandler(message.getHandler());
 		try {
 			userRepository.createUser(message.getUsername(), message.getPassword());
 			authMessageExecutor.handleMessage(message, client, clients);

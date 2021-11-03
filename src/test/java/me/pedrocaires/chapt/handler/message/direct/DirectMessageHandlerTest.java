@@ -71,12 +71,14 @@ class DirectMessageHandlerTest {
 		var directDTO = new DirectRequestDTO();
 		directDTO.setTo(1);
 		directDTO.setContent("");
+		directDTO.setHandler("HANDLER");
 		when(client.getAttachment()).thenReturn(new WebSocketAttachment());
 		when(messageRepository.insertMessage(directDTO.getTo(), 0, directDTO.getContent())).thenReturn(10);
 
 		var response = directMessageExecutor.handleMessage(directDTO, client, Collections.singletonMap(1, toClient))
 				.get();
 
+		assertEquals(directDTO.getHandler(), response.getMessage().getHandler());
 		assertEquals(directDTO.getTo(), response.getMessage().getTo());
 		assertEquals(directDTO.getContent(), response.getMessage().getContent());
 		assertEquals(10, response.getMessage().getMessageId());

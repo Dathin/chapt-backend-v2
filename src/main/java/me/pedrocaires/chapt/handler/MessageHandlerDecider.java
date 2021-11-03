@@ -8,6 +8,7 @@ import me.pedrocaires.chapt.exception.UnexpectedException;
 import me.pedrocaires.chapt.handler.message.auth.AuthMessageExecutor;
 import me.pedrocaires.chapt.handler.message.createuser.CreateUserMessageExecutor;
 import me.pedrocaires.chapt.handler.message.direct.DirectMessageExecutor;
+import me.pedrocaires.chapt.handler.message.history.HistoryMessageExecutor;
 import org.java_websocket.WebSocket;
 import org.springframework.stereotype.Component;
 
@@ -23,16 +24,19 @@ public class MessageHandlerDecider {
 
 	private final CreateUserMessageExecutor createUserMessageExecutor;
 
+	private final HistoryMessageExecutor historyMessageExecutor;
+
 	private final ObjectMapper objectMapper;
 
 	private final AuthenticationFilter authenticationFilter;
 
 	public MessageHandlerDecider(AuthMessageExecutor authMessageExecutor, DirectMessageExecutor directMessageExecutor,
-			CreateUserMessageExecutor createUserMessageExecutor, ObjectMapper objectMapper,
-			AuthenticationFilter authenticationFilter) {
+			CreateUserMessageExecutor createUserMessageExecutor, HistoryMessageExecutor historyMessageExecutor,
+			ObjectMapper objectMapper, AuthenticationFilter authenticationFilter) {
 		this.authMessageExecutor = authMessageExecutor;
 		this.directMessageExecutor = directMessageExecutor;
 		this.createUserMessageExecutor = createUserMessageExecutor;
+		this.historyMessageExecutor = historyMessageExecutor;
 		this.objectMapper = objectMapper;
 		this.authenticationFilter = authenticationFilter;
 	}
@@ -55,6 +59,9 @@ public class MessageHandlerDecider {
 		}
 		else if (handlerEnum == Handler.DIRECT) {
 			return directMessageExecutor.execute(message, client, clients);
+		}
+		else if (handlerEnum == Handler.HISTORY) {
+			return historyMessageExecutor.execute(message, client, clients);
 		}
 		throw new UnexpectedException();
 	}

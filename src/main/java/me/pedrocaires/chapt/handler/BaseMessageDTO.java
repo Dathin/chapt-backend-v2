@@ -2,7 +2,7 @@ package me.pedrocaires.chapt.handler;
 
 public class BaseMessageDTO {
 
-	private String handler;
+	protected String handler;
 
 	public BaseMessageDTO() {
 	}

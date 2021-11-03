@@ -14,6 +14,8 @@ public final class MessageConstants {
 
 	public static final String MESSAGE = "MESSAGE";
 
+	public static final String DELIVERED = "DELIVERED";
+
 	public static final String READ = "READ";
 
 }

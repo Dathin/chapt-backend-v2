@@ -21,8 +21,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -125,11 +124,13 @@ class AuthMessageExecutorTest {
 		var authRequest = new UserInfoDTO();
 		authRequest.setUsername("pedro");
 		authRequest.setPassword("caires");
+		authRequest.setHandler("AUTH");
 		when(userRepository.findUserByUsernameAndPassword(authRequest.getUsername(), authRequest.getPassword()))
 				.thenReturn(Optional.of(user));
 
 		var ackResponse = authMessageExecutor.handleMessage(authRequest, client, clients).get();
 
+		assertEquals(authRequest.getHandler(), ackResponse.getMessage().getHandler());
 		assertTrue(ackResponse.getMessage().isOk());
 		assertTrue(ackResponse.getClients().contains(client));
 	}
