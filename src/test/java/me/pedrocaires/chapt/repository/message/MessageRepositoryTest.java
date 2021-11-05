@@ -46,6 +46,8 @@ class MessageRepositoryTest {
 
 		messageRepository.getMessageHistory(to, from, previousThanId, size);
 
-		verify(jdbcTemplate).query(MessageRepository.MESSAGE_HISTORY_QUERY, messageRowMapper, to, from, previousThanId, size);
+		verify(jdbcTemplate).query(MessageRepository.MESSAGE_HISTORY_QUERY, messageRowMapper, to, from, previousThanId,
+				size);
 	}
+
 }

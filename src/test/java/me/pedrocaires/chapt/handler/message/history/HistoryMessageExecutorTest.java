@@ -21,59 +21,62 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class HistoryMessageExecutorTest {
 
-    @Mock
-    WebSocket client;
+	@Mock
+	WebSocket client;
 
-    @Mock
-    WebSocketAttachment webSocketAttachment;
+	@Mock
+	WebSocketAttachment webSocketAttachment;
 
-    @Mock
-    Authentication authentication;
+	@Mock
+	Authentication authentication;
 
-    @Mock
-    MessageRepository messageRepository;
+	@Mock
+	MessageRepository messageRepository;
 
-    @InjectMocks
-    HistoryMessageExecutor historyMessageExecutor;
+	@InjectMocks
+	HistoryMessageExecutor historyMessageExecutor;
 
-    @Test
-    void shouldBroadcastMessageToSelf() {
-        var userId = 1;
-        var historyRequest = new HistoryRequestDTO();
-        historyRequest.setFrom(1);
-        historyRequest.setSize(1);
-        historyRequest.setPreviousThanId(1L);
-        historyRequest.setHandler("");
-        when(client.getAttachment()).thenReturn(webSocketAttachment);
-        when(webSocketAttachment.getAuthentication()).thenReturn(authentication);
-        when(authentication.getUserId()).thenReturn(userId);
+	@Test
+	void shouldBroadcastMessageToSelf() {
+		var userId = 1;
+		var historyRequest = new HistoryRequestDTO();
+		historyRequest.setFrom(1);
+		historyRequest.setSize(1);
+		historyRequest.setPreviousThanId(1L);
+		historyRequest.setHandler("");
+		when(client.getAttachment()).thenReturn(webSocketAttachment);
+		when(webSocketAttachment.getAuthentication()).thenReturn(authentication);
+		when(authentication.getUserId()).thenReturn(userId);
 
-        var response = historyMessageExecutor.handleMessage(historyRequest, client, Collections.singletonMap(1, client)).get();
+		var response = historyMessageExecutor.handleMessage(historyRequest, client, Collections.singletonMap(1, client))
+				.get();
 
-        assertTrue(response.getClients().contains(client));
-    }
+		assertTrue(response.getClients().contains(client));
+	}
 
-    @Test
-    void shouldReturnBroadcastData() {
-        var userId = 1;
-        var historyRequest = new HistoryRequestDTO();
-        var handler = "";
-        var from = 1;
-        var size = 1;
-        var previousThanId = 1L;
-        historyRequest.setHandler(handler);
-        historyRequest.setFrom(from);
-        historyRequest.setSize(size);
-        historyRequest.setPreviousThanId(previousThanId);
-        var messageHistory = Arrays.asList(new Message());
-        when(client.getAttachment()).thenReturn(webSocketAttachment);
-        when(webSocketAttachment.getAuthentication()).thenReturn(authentication);
-        when(authentication.getUserId()).thenReturn(userId);
-        when(messageRepository.getMessageHistory(userId, from, previousThanId, size)).thenReturn(messageHistory);
+	@Test
+	void shouldReturnBroadcastData() {
+		var userId = 1;
+		var historyRequest = new HistoryRequestDTO();
+		var handler = "";
+		var from = 1;
+		var size = 1;
+		var previousThanId = 1L;
+		historyRequest.setHandler(handler);
+		historyRequest.setFrom(from);
+		historyRequest.setSize(size);
+		historyRequest.setPreviousThanId(previousThanId);
+		var messageHistory = Arrays.asList(new Message());
+		when(client.getAttachment()).thenReturn(webSocketAttachment);
+		when(webSocketAttachment.getAuthentication()).thenReturn(authentication);
+		when(authentication.getUserId()).thenReturn(userId);
+		when(messageRepository.getMessageHistory(userId, from, previousThanId, size)).thenReturn(messageHistory);
 
-        var response = historyMessageExecutor.handleMessage(historyRequest, client, Collections.singletonMap(1, client)).get();
+		var response = historyMessageExecutor.handleMessage(historyRequest, client, Collections.singletonMap(1, client))
+				.get();
 
-        assertEquals(messageHistory, response.getMessage().getMessages());
-        assertEquals(handler, response.getMessage().getHandler());
-    }
+		assertEquals(messageHistory, response.getMessage().getMessages());
+		assertEquals(handler, response.getMessage().getHandler());
+	}
+
 }

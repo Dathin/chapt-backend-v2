@@ -15,32 +15,33 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class MessageRowMapperTest {
 
-    @Mock
-    ResultSet rs;
+	@Mock
+	ResultSet rs;
 
-    @InjectMocks
-    MessageRowMapper messageRowMapper;
+	@InjectMocks
+	MessageRowMapper messageRowMapper;
 
-    @Test
-    void shouldMapMessage() throws SQLException {
-        var id = 1;
-        var toUserId = 1;
-        var fromUserId = 1;
-        var content = "";
-        when(rs.getInt(MessageConstants.ID)).thenReturn(id);
-        when(rs.getInt(MessageConstants.TO_USER_ID)).thenReturn(toUserId);
-        when(rs.getInt(MessageConstants.FROM_USER_ID)).thenReturn(fromUserId);
-        when(rs.getString(MessageConstants.CONTENT)).thenReturn(content);
-        when(rs.getBoolean(MessageConstants.DELIVERED)).thenReturn(true);
-        when(rs.getBoolean(MessageConstants.READ)).thenReturn(true);
+	@Test
+	void shouldMapMessage() throws SQLException {
+		var id = 1;
+		var toUserId = 1;
+		var fromUserId = 1;
+		var content = "";
+		when(rs.getInt(MessageConstants.ID)).thenReturn(id);
+		when(rs.getInt(MessageConstants.TO_USER_ID)).thenReturn(toUserId);
+		when(rs.getInt(MessageConstants.FROM_USER_ID)).thenReturn(fromUserId);
+		when(rs.getString(MessageConstants.CONTENT)).thenReturn(content);
+		when(rs.getBoolean(MessageConstants.DELIVERED)).thenReturn(true);
+		when(rs.getBoolean(MessageConstants.READ)).thenReturn(true);
 
-        var message = messageRowMapper.mapRow(rs, 1);
+		var message = messageRowMapper.mapRow(rs, 1);
 
-        assertEquals(id, message.getId());
-        assertEquals(toUserId, message.getToUserId());
-        assertEquals(fromUserId, message.getFromUserId());
-        assertEquals(content, message.getContent());
-        assertEquals(true, message.getDelivered());
-        assertEquals(true, message.getRead());
-    }
+		assertEquals(id, message.getId());
+		assertEquals(toUserId, message.getToUserId());
+		assertEquals(fromUserId, message.getFromUserId());
+		assertEquals(content, message.getContent());
+		assertEquals(true, message.getDelivered());
+		assertEquals(true, message.getRead());
+	}
+
 }
