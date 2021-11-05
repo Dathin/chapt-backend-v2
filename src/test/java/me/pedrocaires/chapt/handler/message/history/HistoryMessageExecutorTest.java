@@ -52,6 +52,7 @@ class HistoryMessageExecutorTest {
 				.get();
 
 		assertTrue(response.getClients().contains(client));
+		assertEquals(1, response.getClients().size());
 	}
 
 	@Test

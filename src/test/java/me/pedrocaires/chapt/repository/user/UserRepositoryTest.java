@@ -8,6 +8,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.Collections;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -58,6 +61,20 @@ class UserRepositoryTest {
 		userRepository.createUser(username, password);
 
 		verify(jdbcTemplate).update(UserRepository.CREATE_USER_QUERY, username, password);
+	}
+
+	@Test
+	void shouldSearchUsers() {
+		var username = "";
+		var page = 1;
+		var size = 1;
+		List<User> queryResponse = Collections.emptyList();
+		when(jdbcTemplate.query(UserRepository.USER_SEARCH_QUERY, userRowMapper, username, page, size))
+				.thenReturn(queryResponse);
+
+		var users = userRepository.searchUsers(username, page, size);
+
+		assertEquals(queryResponse, users);
 	}
 
 }

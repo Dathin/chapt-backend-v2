@@ -1,11 +1,14 @@
 package me.pedrocaires.chapt.repository.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class User {
 
 	private int id;
 
 	private String username;
 
+	@JsonIgnore
 	private String password;
 
 	public int getId() {
