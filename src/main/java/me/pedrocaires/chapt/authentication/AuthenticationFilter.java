@@ -10,7 +10,7 @@ public class AuthenticationFilter {
 
 	public void doFilter(WebSocket client, Handler handler) {
 		var webSocketAttachment = (WebSocketAttachment) client.getAttachment();
-		var authentication = webSocketAttachment.getAuthenticationFilter();
+		var authentication = webSocketAttachment.getAuthentication();
 		if (!authentication.isAuthenticated() && (handler != Handler.AUTH && handler != Handler.CREATE_USER)) {
 			throw new UnauthenticatedException();
 		}

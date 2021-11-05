@@ -21,8 +21,7 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SimpleServerTest {
@@ -33,7 +32,6 @@ class SimpleServerTest {
 	@Mock
 	InetSocketAddress inetSocketAddress;
 
-	@Mock
 	WebSocket client;
 
 	@Mock
@@ -47,11 +45,13 @@ class SimpleServerTest {
 
 	@BeforeEach
 	void beforeEach() {
-		client = new WebSocketImpl(webSocketListener, Arrays.asList());
+		client = mock(WebSocket.class);
 	}
 
 	@Test
 	void shouldSetAttachmentOnOpen() {
+		client = new WebSocketImpl(webSocketListener, Arrays.asList());
+
 		simpleServer.onOpen(client, clientHandshake);
 
 		assertNotNull(client.getAttachment());
@@ -72,6 +72,7 @@ class SimpleServerTest {
 	@Test
 	void shouldOnError() {
 		simpleServer.onError(client, new RuntimeException());
+		verify(client).close();
 	}
 
 	@Test

@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,6 +29,7 @@ class MessageIdResultSetExtractorTest {
 
 		var providedMessageId = messageIdResultSetExtractor.extractData(resultSet);
 
+		verify(resultSet).next();
 		assertEquals(expectedMessageId, providedMessageId);
 	}
 

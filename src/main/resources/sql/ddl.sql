@@ -21,7 +21,7 @@ create table messages
             primary key,
     to_user_id int not null,
     from_user_id int not null,
-    message varchar(250) not null,
+    content varchar(250) not null,
     delivered bool not null default false,
     read bool not null default false,
     constraint fk_to foreign key(to_user_id) references users(id),

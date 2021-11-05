@@ -8,7 +8,7 @@ public class Message {
 
 	private Integer fromUserId;
 
-	private String message;
+	private String content;
 
 	private Boolean delivered;
 
@@ -38,12 +38,12 @@ public class Message {
 		this.fromUserId = fromUserId;
 	}
 
-	public String getMessage() {
-		return message;
+	public String getContent() {
+		return content;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public Boolean getDelivered() {

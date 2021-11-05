@@ -38,28 +38,28 @@ class AuthenticationFilterTest {
 
 	@Test
 	void shouldPassAuthenticationFilter() {
-		webSocketAttachment.getAuthenticationFilter().setAuthenticated(true);
+		webSocketAttachment.getAuthentication().setAuthenticated(true);
 
 		assertDoesNotThrow(() -> authenticationFilter.doFilter(client, Handler.DIRECT));
 	}
 
 	@Test
 	void shouldPassAuthenticationFilterWhenTryingToAuhenticate() {
-		webSocketAttachment.getAuthenticationFilter().setAuthenticated(false);
+		webSocketAttachment.getAuthentication().setAuthenticated(false);
 
 		assertDoesNotThrow(() -> authenticationFilter.doFilter(client, Handler.AUTH));
 	}
 
 	@Test
 	void shouldPassAuthenticationFilterWhenTryingToRegister() {
-		webSocketAttachment.getAuthenticationFilter().setAuthenticated(false);
+		webSocketAttachment.getAuthentication().setAuthenticated(false);
 
 		assertDoesNotThrow(() -> authenticationFilter.doFilter(client, Handler.CREATE_USER));
 	}
 
 	@Test
 	void shouldThrowWhenNotAuthenticatedAndNotTryingTo() {
-		webSocketAttachment.getAuthenticationFilter().setAuthenticated(false);
+		webSocketAttachment.getAuthentication().setAuthenticated(false);
 
 		assertThrows(UnauthenticatedException.class, () -> authenticationFilter.doFilter(client, Handler.DIRECT));
 	}

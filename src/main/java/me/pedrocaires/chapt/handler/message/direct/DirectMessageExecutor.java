@@ -28,7 +28,7 @@ public class DirectMessageExecutor extends MessageExecutor<DirectRequestDTO, Dir
 		var receipting = clients.get(message.getTo());
 		Collection<WebSocket> clientsToBroadcast = receipting == null ? Collections.singletonList(client)
 				: Arrays.asList(receipting, client);
-		var userId = ((WebSocketAttachment) client.getAttachment()).getAuthenticationFilter().getUserId();
+		var userId = ((WebSocketAttachment) client.getAttachment()).getAuthentication().getUserId();
 		var messageId = messageRepository.insertMessage(message.getTo(), userId, message.getContent());
 		return Optional.of(new Broadcast<>(new DirectResponseDTO(message, messageId), clientsToBroadcast));
 	}

@@ -12,7 +12,7 @@ public class WebSocketAttachment {
 		this.authentication = authentication;
 	}
 
-	public Authentication getAuthenticationFilter() {
+	public Authentication getAuthentication() {
 		return authentication;
 	}
 

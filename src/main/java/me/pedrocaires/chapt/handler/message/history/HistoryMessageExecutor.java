@@ -27,7 +27,7 @@ public class HistoryMessageExecutor extends MessageExecutor<HistoryRequestDTO, H
 	@Override
 	public Optional<Broadcast<HistoryResponseDTO>> handleMessage(HistoryRequestDTO message, WebSocket client,
 			Map<Integer, WebSocket> clients) {
-		var userId = ((WebSocketAttachment) client.getAttachment()).getAuthenticationFilter().getUserId();
+		var userId = ((WebSocketAttachment) client.getAttachment()).getAuthentication().getUserId();
 		var messageHistory = messageRepository.getMessageHistory(userId, message.getFrom(), message.getPreviousThanId(),
 				message.getSize());
 		var historyResponse = new HistoryResponseDTO(message.getHandler(), messageHistory);

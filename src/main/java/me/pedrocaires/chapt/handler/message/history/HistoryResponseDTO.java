@@ -8,7 +8,6 @@ import java.util.List;
 public class HistoryResponseDTO extends BaseMessageDTO {
 
 	public HistoryResponseDTO() {
-		this.messages = messages;
 	}
 
 	public HistoryResponseDTO(String handler, List<Message> messages) {
