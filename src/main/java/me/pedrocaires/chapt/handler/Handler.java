@@ -2,7 +2,7 @@ package me.pedrocaires.chapt.handler;
 
 public enum Handler {
 
-	AUTH, DIRECT, CREATE_USER;
+	AUTH, DIRECT, CREATE_USER, HISTORY;
 
 	public static Handler fromString(String name) {
 		try {

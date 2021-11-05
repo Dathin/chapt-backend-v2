@@ -32,7 +32,7 @@ public class AuthMessageExecutor extends MessageExecutor<UserInfoDTO, AckRespons
 		var user = userRepository.findUserByUsernameAndPassword(message.getUsername(), message.getPassword());
 		var authenticated = user.isPresent();
 		var webSocketAttachment = (WebSocketAttachment) client.getAttachment();
-		var authentication = webSocketAttachment.getAuthenticationFilter();
+		var authentication = webSocketAttachment.getAuthentication();
 		authentication.setAuthenticated(authenticated);
 		var authResponse = new AckResponseDTO(authenticated);
 		if (authenticated) {

@@ -19,6 +19,9 @@ class MessageRepositoryTest {
 	@Mock
 	MessageIdResultSetExtractor messageIdResultSetExtractor;
 
+	@Mock
+	MessageRowMapper messageRowMapper;
+
 	@InjectMocks
 	MessageRepository messageRepository;
 
@@ -32,6 +35,19 @@ class MessageRepositoryTest {
 
 		verify(jdbcTemplate).query(MessageRepository.INSERT_MESSAGE_QUERY, messageIdResultSetExtractor, to, from,
 				message);
+	}
+
+	@Test
+	void shouldGetMessageHistory() {
+		var to = 1;
+		var from = 1;
+		var previousThanId = 1L;
+		var size = 1;
+
+		messageRepository.getMessageHistory(to, from, previousThanId, size);
+
+		verify(jdbcTemplate).query(MessageRepository.MESSAGE_HISTORY_QUERY, messageRowMapper, to, from, previousThanId,
+				size);
 	}
 
 }

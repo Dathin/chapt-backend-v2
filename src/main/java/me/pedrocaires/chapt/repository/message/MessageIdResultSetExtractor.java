@@ -12,6 +12,7 @@ public class MessageIdResultSetExtractor implements ResultSetExtractor<Integer> 
 
 	@Override
 	public Integer extractData(ResultSet rs) throws SQLException, DataAccessException {
+		rs.next();
 		return rs.getInt(MessageConstants.ID);
 	}
 

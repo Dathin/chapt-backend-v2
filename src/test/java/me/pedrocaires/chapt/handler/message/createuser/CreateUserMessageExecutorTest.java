@@ -12,8 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
@@ -35,10 +34,12 @@ class CreateUserMessageExecutorTest {
 	@Test
 	void shouldReturnOkAckResponse() {
 		var userInfoDTO = new UserInfoDTO();
+		userInfoDTO.setHandler("HANDLER");
 
 		var ackResponse = createUserMessageExecutor
 				.handleMessage(userInfoDTO, client, Collections.singletonMap(1, client)).get();
 
+		assertEquals(userInfoDTO.getHandler(), ackResponse.getMessage().getHandler());
 		assertTrue(ackResponse.getMessage().isOk());
 		assertTrue(ackResponse.getClients().contains(client));
 	}

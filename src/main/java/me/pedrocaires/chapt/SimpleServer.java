@@ -56,6 +56,7 @@ public class SimpleServer extends WebSocketServer {
 	@Override
 	public void onError(WebSocket client, Exception ex) {
 		LOGGER.error("an error occurred", ex);
+		client.close();
 	}
 
 	@Override

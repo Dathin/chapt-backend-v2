@@ -9,6 +9,7 @@ import me.pedrocaires.chapt.exception.UnexpectedException;
 import me.pedrocaires.chapt.handler.message.auth.AuthMessageExecutor;
 import me.pedrocaires.chapt.handler.message.createuser.CreateUserMessageExecutor;
 import me.pedrocaires.chapt.handler.message.direct.DirectMessageExecutor;
+import me.pedrocaires.chapt.handler.message.history.HistoryMessageExecutor;
 import org.java_websocket.WebSocket;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +25,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class MessageHandlerHandlerDeciderTest {
+class MessageHandlerDeciderTest {
 
 	@Mock
 	AuthMessageExecutor authMessageExecutor;
@@ -34,6 +35,9 @@ class MessageHandlerHandlerDeciderTest {
 
 	@Mock
 	CreateUserMessageExecutor createUserMessageExecutor;
+
+	@Mock
+	HistoryMessageExecutor historyMessageExecutor;
 
 	@Mock
 	AuthenticationFilter authenticationFilter;
@@ -123,6 +127,19 @@ class MessageHandlerHandlerDeciderTest {
 		messageHandlerDecider.decide(message, client, clients);
 
 		verify(createUserMessageExecutor).execute(message, client, clients);
+	}
+
+	@Test
+	void shouldCallHistoryMessageExecutor() throws JsonProcessingException {
+		var message = "";
+		var clients = Collections.singletonMap(1, client);
+		when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
+		when(objectNode.get("handler")).thenReturn(jsonNode);
+		when(jsonNode.toString()).thenReturn("\"HISTORY\"");
+
+		messageHandlerDecider.decide(message, client, clients);
+
+		verify(historyMessageExecutor).execute(message, client, clients);
 	}
 
 }

@@ -12,7 +12,9 @@ public final class MessageConstants {
 
 	public static final String FROM_USER_ID = "FROM_USER_ID";
 
-	public static final String MESSAGE = "MESSAGE";
+	public static final String CONTENT = "CONTENT";
+
+	public static final String DELIVERED = "DELIVERED";
 
 	public static final String READ = "READ";
 
