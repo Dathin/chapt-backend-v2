@@ -7,8 +7,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.Collections;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MessageRepositoryTest {
@@ -43,11 +47,13 @@ class MessageRepositoryTest {
 		var from = 1;
 		var previousThanId = 1L;
 		var size = 1;
+		List<Message> queryResponse = Collections.emptyList();
+		when(jdbcTemplate.query(MessageRepository.MESSAGE_HISTORY_QUERY, messageRowMapper, to, from, previousThanId,
+				size)).thenReturn(queryResponse);
 
-		messageRepository.getMessageHistory(to, from, previousThanId, size);
+		var messages = messageRepository.getMessageHistory(to, from, previousThanId, size);
 
-		verify(jdbcTemplate).query(MessageRepository.MESSAGE_HISTORY_QUERY, messageRowMapper, to, from, previousThanId,
-				size);
+		assertEquals(queryResponse, messages);
 	}
 
 }

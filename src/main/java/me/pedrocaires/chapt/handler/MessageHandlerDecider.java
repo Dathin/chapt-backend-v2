@@ -9,6 +9,7 @@ import me.pedrocaires.chapt.handler.message.auth.AuthMessageExecutor;
 import me.pedrocaires.chapt.handler.message.createuser.CreateUserMessageExecutor;
 import me.pedrocaires.chapt.handler.message.direct.DirectMessageExecutor;
 import me.pedrocaires.chapt.handler.message.history.HistoryMessageExecutor;
+import me.pedrocaires.chapt.handler.message.usersearch.UserSearchMessageExecutor;
 import org.java_websocket.WebSocket;
 import org.springframework.stereotype.Component;
 
@@ -26,21 +27,26 @@ public class MessageHandlerDecider {
 
 	private final HistoryMessageExecutor historyMessageExecutor;
 
+	private final UserSearchMessageExecutor userSearchMessageExecutor;
+
 	private final ObjectMapper objectMapper;
 
 	private final AuthenticationFilter authenticationFilter;
 
 	public MessageHandlerDecider(AuthMessageExecutor authMessageExecutor, DirectMessageExecutor directMessageExecutor,
 			CreateUserMessageExecutor createUserMessageExecutor, HistoryMessageExecutor historyMessageExecutor,
-			ObjectMapper objectMapper, AuthenticationFilter authenticationFilter) {
+			UserSearchMessageExecutor userSearchMessageExecutor, ObjectMapper objectMapper,
+			AuthenticationFilter authenticationFilter) {
 		this.authMessageExecutor = authMessageExecutor;
 		this.directMessageExecutor = directMessageExecutor;
 		this.createUserMessageExecutor = createUserMessageExecutor;
 		this.historyMessageExecutor = historyMessageExecutor;
+		this.userSearchMessageExecutor = userSearchMessageExecutor;
 		this.objectMapper = objectMapper;
 		this.authenticationFilter = authenticationFilter;
 	}
 
+	// This is getting kind of big and could be automated
 	public Optional<SerializableBroadcast> decide(String message, WebSocket client, Map<Integer, WebSocket> clients)
 			throws JsonProcessingException {
 		var objectMessage = objectMapper.readValue(message, ObjectNode.class);
@@ -62,6 +68,9 @@ public class MessageHandlerDecider {
 		}
 		else if (handlerEnum == Handler.HISTORY) {
 			return historyMessageExecutor.execute(message, client, clients);
+		}
+		else if (handlerEnum == Handler.USER_SEARCH) {
+			return userSearchMessageExecutor.execute(message, client, clients);
 		}
 		throw new UnexpectedException();
 	}

@@ -4,6 +4,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -19,6 +20,10 @@ public class UserRepository {
 
 	protected static final String CREATE_USER_QUERY = String.format("INSERT INTO USERS (%s, %s) VALUES (?, ?)",
 			UserConstants.USERNAME, UserConstants.PASSWORD);
+
+	protected static final String USER_SEARCH_QUERY = String.format(
+			"SELECT %s, %s FROM USERS WHERE %s=? OFFSET ? LIMIT ?", UserConstants.ID, UserConstants.USERNAME,
+			UserConstants.USERNAME);
 
 	public UserRepository(JdbcTemplate jdbcTemplate, UserRowMapper userRowMapper) {
 		this.jdbcTemplate = jdbcTemplate;
@@ -37,6 +42,10 @@ public class UserRepository {
 		catch (EmptyResultDataAccessException ex) {
 			return Optional.empty();
 		}
+	}
+
+	public List<User> searchUsers(String username, int page, int size) {
+		return jdbcTemplate.query(USER_SEARCH_QUERY, userRowMapper, username, page, size);
 	}
 
 }

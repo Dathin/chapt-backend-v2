@@ -10,6 +10,7 @@ import me.pedrocaires.chapt.handler.message.auth.AuthMessageExecutor;
 import me.pedrocaires.chapt.handler.message.createuser.CreateUserMessageExecutor;
 import me.pedrocaires.chapt.handler.message.direct.DirectMessageExecutor;
 import me.pedrocaires.chapt.handler.message.history.HistoryMessageExecutor;
+import me.pedrocaires.chapt.handler.message.usersearch.UserSearchMessageExecutor;
 import org.java_websocket.WebSocket;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,6 +39,9 @@ class MessageHandlerDeciderTest {
 
 	@Mock
 	HistoryMessageExecutor historyMessageExecutor;
+
+	@Mock
+	UserSearchMessageExecutor userSearchMessageExecutor;
 
 	@Mock
 	AuthenticationFilter authenticationFilter;
@@ -72,7 +76,7 @@ class MessageHandlerDeciderTest {
 		var message = "";
 		when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
 		when(objectNode.get("handler")).thenReturn(jsonNode);
-		when(jsonNode.toString()).thenReturn("\"AUTH\"");
+		when(jsonNode.toString()).thenReturn(getHandlerWithQuotationMark(Handler.AUTH));
 
 		messageHandlerDecider.decide(message, client, Collections.singletonMap(1, client));
 
@@ -96,7 +100,7 @@ class MessageHandlerDeciderTest {
 		var clients = Collections.singletonMap(1, client);
 		when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
 		when(objectNode.get("handler")).thenReturn(jsonNode);
-		when(jsonNode.toString()).thenReturn("\"AUTH\"");
+		when(jsonNode.toString()).thenReturn(getHandlerWithQuotationMark(Handler.AUTH));
 
 		messageHandlerDecider.decide(message, client, clients);
 
@@ -109,7 +113,7 @@ class MessageHandlerDeciderTest {
 		var clients = Collections.singletonMap(1, client);
 		when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
 		when(objectNode.get("handler")).thenReturn(jsonNode);
-		when(jsonNode.toString()).thenReturn("\"DIRECT\"");
+		when(jsonNode.toString()).thenReturn(getHandlerWithQuotationMark(Handler.DIRECT));
 
 		messageHandlerDecider.decide(message, client, clients);
 
@@ -122,7 +126,7 @@ class MessageHandlerDeciderTest {
 		var clients = Collections.singletonMap(1, client);
 		when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
 		when(objectNode.get("handler")).thenReturn(jsonNode);
-		when(jsonNode.toString()).thenReturn("\"CREATE_USER\"");
+		when(jsonNode.toString()).thenReturn(getHandlerWithQuotationMark(Handler.CREATE_USER));
 
 		messageHandlerDecider.decide(message, client, clients);
 
@@ -135,11 +139,28 @@ class MessageHandlerDeciderTest {
 		var clients = Collections.singletonMap(1, client);
 		when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
 		when(objectNode.get("handler")).thenReturn(jsonNode);
-		when(jsonNode.toString()).thenReturn("\"HISTORY\"");
+		when(jsonNode.toString()).thenReturn(getHandlerWithQuotationMark(Handler.HISTORY));
 
 		messageHandlerDecider.decide(message, client, clients);
 
 		verify(historyMessageExecutor).execute(message, client, clients);
+	}
+
+	@Test
+	void shouldCallUserSearchMessageExecutor() throws JsonProcessingException {
+		var message = "";
+		var clients = Collections.singletonMap(1, client);
+		when(objectMapper.readValue(message, ObjectNode.class)).thenReturn(objectNode);
+		when(objectNode.get("handler")).thenReturn(jsonNode);
+		when(jsonNode.toString()).thenReturn(getHandlerWithQuotationMark(Handler.USER_SEARCH));
+
+		messageHandlerDecider.decide(message, client, clients);
+
+		verify(userSearchMessageExecutor).execute(message, client, clients);
+	}
+
+	private String getHandlerWithQuotationMark(Handler handler) {
+		return String.format("\"%s\"", handler);
 	}
 
 }
