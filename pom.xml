@@ -17,7 +17,7 @@
         <java-websocket.version>1.5.1</java-websocket.version>
         <spring-context.version>5.3.10</spring-context.version>
         <spring-jdbc.version>5.3.12</spring-jdbc.version>
-        <postgres-jdbc.version>42.2.24</postgres-jdbc.version>
+        <postgres-jdbc.version>42.3.8</postgres-jdbc.version>
         <hikari.version>5.0.0</hikari.version>
         <jackson.version>2.13.0</jackson.version>
         <logback.version>1.2.6</logback.version>
